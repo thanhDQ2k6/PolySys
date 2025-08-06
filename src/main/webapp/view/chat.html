@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ứng dụng Chat đơn giản</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* Thay đổi màu nền thành gradient */
+            background: linear-gradient(to right bottom, #a8c0ff, #3f2b96); /* Ví dụ: gradient từ xanh nhạt sang tím đậm */
+            margin: 0;
+        }
+        .chat-container {
+            width: 90%;
+            max-width: 600px;
+            height: 80vh;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .chat-header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.2em;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            text-align: center;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* Khoảng cách giữa các tin nhắn */
+        }
+        .message {
+            background-color: #e9e9eb;
+            padding: 8px 12px;
+            border-radius: 15px;
+            max-width: 70%;
+            word-wrap: break-word;
+            align-self: flex-start; /* Tin nhắn của người khác */
+        }
+        .message.my-message {
+            background-color: #dcf8c6; /* Màu xanh lá nhạt cho tin nhắn của mình */
+            align-self: flex-end; /* Tin nhắn của mình */
+        }
+        .message strong {
+            font-size: 0.9em;
+            color: #555;
+            display: block;
+            margin-bottom: 3px;
+        }
+        .message.my-message strong {
+            color: #333;
+        }
+        .chat-input {
+            display: flex;
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+        }
+        .chat-input input[type="text"] {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 1em;
+            outline: none;
+            margin-right: 10px;
+        }
+        .chat-input button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        .chat-input button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="chat-container">
+    <div class="chat-header">
+        Chat Room
+    </div>
+    <div class="chat-messages" id="chatMessages">
+        <!-- Tin nhắn sẽ được thêm vào đây bởi JavaScript -->
+
+    </div>
+    <div class="chat-input">
+        <label for="messageInput"></label>
+        <input type="text" id="messageInput" placeholder="Nhập tin nhắn của bạn...">
+        <button id="sendButton">Gửi</button>
+    </div>
+</div>
+
+<!-- Liên kết đến file JavaScript mới -->
+<script src="../js/chat.js"></script>
+</body>
+</html>

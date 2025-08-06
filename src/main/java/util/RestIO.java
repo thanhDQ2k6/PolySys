@@ -1,4 +1,4 @@
-package utility;
+package util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.servlet.http.HttpServletRequest;
