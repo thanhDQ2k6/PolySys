@@ -1,4 +1,4 @@
-package lab7;
+package servlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet("/lab7/bai1")
+@WebServlet("/servlet/bai1")
 public class Bai1Servlet extends HttpServlet {
 
     @Override
