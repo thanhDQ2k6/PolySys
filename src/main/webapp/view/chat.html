@@ -11,8 +11,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            /* Thay đổi màu nền thành gradient */
-            background: linear-gradient(to right bottom, #a8c0ff, #3f2b96); /* Ví dụ: gradient từ xanh nhạt sang tím đậm */
+            background: linear-gradient(to right bottom, #a8c0ff, #3f2b96);
             margin: 0;
         }
         .chat-container {
@@ -33,7 +32,15 @@
             font-size: 1.2em;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
-            text-align: center;
+            /* Thêm Flexbox để căn chỉnh tiêu đề và số lượng người online */
+            display: flex;
+            justify-content: space-between; /* Đẩy nội dung ra hai bên */
+            align-items: center; /* Căn giữa theo chiều dọc */
+        }
+        #client-count {
+            font-size: 0.9em;
+            color: #cceeff; /* Màu chữ nhạt hơn một chút */
+            font-weight: bold;
         }
         .chat-messages {
             flex-grow: 1;
@@ -54,6 +61,26 @@
         .message.my-message {
             background-color: #dcf8c6; /* Màu xanh lá nhạt cho tin nhắn của mình */
             align-self: flex-end; /* Tin nhắn của mình */
+        }
+        /* Style cho tin nhắn hệ thống (type 0 và 1) */
+        .message.system-message {
+            background-color: #FFFACD; /* Màu vàng nhạt (Lemon Chiffon) */
+            color: #6a5a00; /* Màu chữ đậm hơn để dễ đọc */
+            font-style: italic;
+            text-align: center;
+            align-self: center; /* Căn giữa trong khung chat */
+            max-width: 90%; /* Cho phép chiếm nhiều không gian hơn */
+            border: 1px solid #FFD700; /* Viền vàng nhẹ */
+        }
+        /* Style cho tin nhắn lỗi (type -1) */
+        .message.error-message {
+            background-color: #FFEBEE; /* Màu đỏ nhạt */
+            color: #D32F2F; /* Màu chữ đỏ đậm */
+            font-weight: bold;
+            text-align: center;
+            align-self: center;
+            max-width: 90%;
+            border: 1px solid #EF5350;
         }
         .message strong {
             font-size: 0.9em;
@@ -96,20 +123,20 @@
 <body>
 <div class="chat-container">
     <div class="chat-header">
-        Chat Room
+        <span>Chat Room</span>
+        <span id="client-count">Onlines: 0</span> <!-- Đã thêm để hiển thị số người online -->
     </div>
     <div class="chat-messages" id="chatMessages">
         <!-- Tin nhắn sẽ được thêm vào đây bởi JavaScript -->
-
     </div>
     <div class="chat-input">
-        <label for="messageInput"></label>
+        <label for="messageInput" class="sr-only"></label> <!-- Thêm label cho input -->
         <input type="text" id="messageInput" placeholder="Nhập tin nhắn của bạn...">
         <button id="sendButton">Gửi</button>
     </div>
 </div>
 
-<!-- Liên kết đến file JavaScript mới -->
+<!-- Liên kết đến file JavaScript -->
 <script src="../js/chat.js"></script>
 </body>
 </html>
