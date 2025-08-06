@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Form</title>
+    <title>Forgot Password</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -18,7 +18,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .login-container {
+        .forgot-password-container {
             background: white;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -28,23 +28,23 @@
             transition: all 0.3s ease;
         }
 
-        .login-container:hover {
+        .forgot-password-container:hover {
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
         }
 
-        .login-header {
+        .forgot-password-header {
             text-align: center;
             margin-bottom: 25px;
             color: #2c3e50;
         }
 
-        .login-header h2 {
+        .forgot-password-header h2 {
             font-weight: 700;
             margin-bottom: 5px;
             font-size: 1.8rem;
         }
 
-        .login-header p {
+        .forgot-password-header p {
             color: #7f8c8d;
             font-size: 1.1rem;
         }
@@ -68,7 +68,7 @@
             box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
         }
 
-        .btn-login {
+        .btn-retrieve {
             background: linear-gradient(135deg, #3498db, #8e44ad);
             border: none;
             padding: 12px 30px;
@@ -80,12 +80,12 @@
             box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
         }
 
-        .btn-login:hover {
+        .btn-retrieve:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
         }
 
-        .btn-login:active {
+        .btn-retrieve:active {
             transform: translateY(1px);
         }
 
@@ -98,12 +98,12 @@
     </style>
 </head>
 <body>
-<div class="login-container">
-    <div class="login-header">
-        <h2>Login</h2>
+<div class="forgot-password-container">
+    <div class="forgot-password-header">
+        <h2>Forgot Password</h2>
     </div>
 
-    <form id="loginForm">
+    <form id="forgotPasswordForm">
         <div class="mb-4">
             <label for="username" class="form-label">Username</label>
             <input
@@ -116,36 +116,27 @@
         </div>
 
         <div class="mb-4">
-            <label for="password" class="form-label">Password</label>
+            <label for="email" class="form-label">Email</label>
             <input
-                    type="password"
+                    type="email"
                     class="form-control"
-                    id="password"
-                    placeholder="Enter your password"
+                    id="email"
+                    placeholder="Enter your email"
                     required
             >
         </div>
 
-        <div class="mb-4 form-check">
-            <input
-                    type="checkbox"
-                    class="form-check-input"
-                    id="rememberMe"
-            >
-            <label class="form-check-label" for="rememberMe">Remember me?</label>
-        </div>
-
-        <button type="submit" class="btn btn-login">
-            <i class="fas fa-sign-in-alt me-2"></i>Login
+        <button type="submit" class="btn btn-retrieve">
+            <i class="fas fa-paper-plane me-2"></i>Retrieve
         </button>
     </form>
 </div>
 
 <script>
-    document.getElementById('loginForm').addEventListener('submit', function (e) {
+    document.getElementById('forgotPasswordForm').addEventListener('submit', function (e) {
         e.preventDefault();
-        // Add your login logic here
-        alert('Login submitted!');
+        // Add your password retrieval logic here
+        alert('Password retrieval request submitted!');
     });
 </script>
 </body>
