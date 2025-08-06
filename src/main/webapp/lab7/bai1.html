@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 1 | Gọi Servlet và xử lý JSON</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            background-color: #f0f2f5;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<h1>Nhấn nút để lấy dữ liệu JSON từ Servlet</h1>
+<button onclick="fetchData()">Lấy dữ liệu JSON</button>
+
+<script>
+    function fetchData() {
+        // URL của servlet đã được ánh xạ đến "/json-servlet"
+        const servletUrl = "http://localhost:8080/PolySys_war/lab7/bai1";
+
+        fetch(servletUrl)
+            .then(response => {
+                // Kiểm tra xem phản hồi có thành công không
+                if (!response.ok) {
+                    throw new Error('Mã lỗi HTTP: ' + response.status);
+                }
+                // Chuyển đổi phản hồi thành đối tượng JSON
+                return response.json();
+            })
+            .then(data => {
+                // In đối tượng JSON đã nhận được ra console
+                console.log('Dữ liệu JSON từ Servlet:');
+                console.log(data);
+                alert('Đã lấy dữ liệu JSON và xuất ra Console. Vui lòng mở Developer Tools (F12) để kiểm tra!');
+            })
+            .catch(error => {
+                // Xử lý các lỗi xảy ra trong quá trình fetch
+                console.error('Đã xảy ra lỗi:', error);
+            });
+    }
+</script>
+</body>
+</html>

@@ -2,22 +2,4 @@
 
     <display-name>Archetype Created Web Application</display-name>
 
-<!--    <filter>-->
-<!--        <filter-name>f1</filter-name>-->
-<!--        <filter-class>lab5.filter1</filter-class>-->
-<!--    </filter>-->
-<!--    <filter-mapping>-->
-<!--        <filter-name>f1</filter-name>-->
-<!--        <url-pattern>/counter</url-pattern>-->
-<!--    </filter-mapping>-->
-
-<!--    <filter>-->
-<!--        <filter-name>f2</filter-name>-->
-<!--        <filter-class>lab5.filter2</filter-class>-->
-<!--    </filter>-->
-<!--    <filter-mapping>-->
-<!--        <filter-name>f2</filter-name>-->
-<!--        <url-pattern>/counter</url-pattern>-->
-<!--    </filter-mapping>-->
-
 </web-app>
