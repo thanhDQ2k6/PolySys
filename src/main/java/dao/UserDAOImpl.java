@@ -1,7 +1,6 @@
 package dao;
 
 import entity.User;
-import utils.XJPA;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +25,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void create(User user) throws EntityExistsException {
+    public boolean create(User user) throws EntityExistsException {
         try {
             em.getTransaction().begin();
             if (user.getId() != null && em.find(User.class, user.getId()) != null) {
@@ -34,9 +33,11 @@ public class UserDAOImpl implements UserDAO {
             }
             em.persist(user);
             em.getTransaction().commit();
+            return true;
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
+                return false;
             }
             throw e;
         }

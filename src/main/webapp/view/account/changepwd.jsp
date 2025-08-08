@@ -89,11 +89,17 @@
             transform: translateY(1px);
         }
 
-        .validation-message {
-            font-size: 0.9rem;
-            color: #e74c3c;
-            margin-top: 8px;
-            height: 20px;
+        /* CSS cho div thông báo lỗi */
+        .error-message {
+            background-color: #ffebee; /* Màu hồng nhạt */
+            border: 1px solid #ef9a9a; /* Viền đỏ nhẹ */
+            color: #b71c1c; /* Màu chữ đỏ đậm */
+            padding: 10px 15px; /* Đệm bên trong */
+            border-radius: 5px; /* Bo tròn góc */
+            margin-bottom: 15px; /* Khoảng cách với các phần tử khác */
+            margin-top: 45px;
+            font-size: 0.9em;
+            text-align: center;
         }
     </style>
 </head>
@@ -103,21 +109,19 @@
         <h2>Change Password</h2>
     </div>
 
-    <form id="changePasswordForm">
-        <div class="mb-4">
-            <label for="username" class="form-label">Username</label>
-            <input
-                    type="text"
-                    class="form-control"
-                    id="username"
-                    placeholder="Enter your username"
-                    required
-            >
+    <!-- Khối mã này sẽ hiển thị thông báo lỗi từ Servlet -->
+    <c:if test="${not empty error}">
+        <div class="alert alert-danger" role="alert">
+                ${error}
         </div>
+    </c:if>
+
+    <form id="changePasswordForm" method="POST" action="${pageContext.request.contextPath}/account/changepwd">
 
         <div class="mb-4">
             <label for="currentPassword" class="form-label">Current Password</label>
             <input
+                    name="pwd"
                     type="password"
                     class="form-control"
                     id="currentPassword"
@@ -129,6 +133,7 @@
         <div class="mb-4">
             <label for="newPassword" class="form-label">New Password</label>
             <input
+                    name="new1"
                     type="password"
                     class="form-control"
                     id="newPassword"
@@ -140,6 +145,7 @@
         <div class="mb-4">
             <label for="confirmNewPassword" class="form-label">Confirm New Password</label>
             <input
+                    name="new2"
                     type="password"
                     class="form-control"
                     id="confirmNewPassword"
@@ -151,13 +157,17 @@
         <button type="submit" class="btn btn-change">
             <i class="fas fa-lock me-2"></i>Change Password
         </button>
+
+        <c:if test="${not empty error}">
+            <div class="error-message">
+                    ${error}
+            </div>
+        </c:if>
     </form>
 </div>
 
 <script>
     document.getElementById('changePasswordForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        // Add your change password logic here
         alert('Password change request submitted!');
     });
 </script>

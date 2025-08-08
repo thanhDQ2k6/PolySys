@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Profile</title>
+    <title>Login Form</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -18,7 +18,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .edit-profile-container {
+        .login-container {
             background: white;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -28,23 +28,23 @@
             transition: all 0.3s ease;
         }
 
-        .edit-profile-container:hover {
+        .login-container:hover {
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
         }
 
-        .edit-profile-header {
+        .login-header {
             text-align: center;
             margin-bottom: 25px;
             color: #2c3e50;
         }
 
-        .edit-profile-header h2 {
+        .login-header h2 {
             font-weight: 700;
             margin-bottom: 5px;
             font-size: 1.8rem;
         }
 
-        .edit-profile-header p {
+        .login-header p {
             color: #7f8c8d;
             font-size: 1.1rem;
         }
@@ -68,7 +68,7 @@
             box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
         }
 
-        .btn-save {
+        .btn-login {
             background: linear-gradient(135deg, #3498db, #8e44ad);
             border: none;
             padding: 12px 30px;
@@ -80,44 +80,40 @@
             box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
         }
 
-        .btn-save:hover {
+        .btn-login:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
         }
 
-        .btn-save:active {
+        .btn-login:active {
             transform: translateY(1px);
         }
 
-        .validation-message {
-            font-size: 0.9rem;
-            color: #e74c3c;
-            margin-top: 8px;
-            height: 20px;
+        /* CSS cho div thông báo lỗi */
+        .error-message {
+            background-color: #ffebee; /* Màu hồng nhạt */
+            border: 1px solid #ef9a9a; /* Viền đỏ nhẹ */
+            color: #b71c1c; /* Màu chữ đỏ đậm */
+            padding: 10px 15px; /* Đệm bên trong */
+            border-radius: 5px; /* Bo tròn góc */
+            margin-bottom: 15px; /* Khoảng cách với các phần tử khác */
+            margin-top: 45px;
+            font-size: 0.9em;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-<div class="edit-profile-container">
-    <div class="edit-profile-header">
-        <h2>Edit Profile</h2>
+<div class="login-container">
+    <div class="login-header">
+        <h2>Login</h2>
     </div>
 
-    <form id="editProfileForm">
-        <div class="mb-4">
-            <label for="fullname" class="form-label">Full Name</label>
-            <input
-                    type="text"
-                    class="form-control"
-                    id="fullname"
-                    placeholder="Enter your full name"
-                    required
-            >
-        </div>
-
+    <form id="loginForm" method="post" action="${pageContext.request.contextPath}/login">
         <div class="mb-4">
             <label for="username" class="form-label">Username</label>
             <input
+                    name="username"
                     type="text"
                     class="form-control"
                     id="username"
@@ -127,19 +123,9 @@
         </div>
 
         <div class="mb-4">
-            <label for="email" class="form-label">Email</label>
-            <input
-                    type="email"
-                    class="form-control"
-                    id="email"
-                    placeholder="Enter your email"
-                    required
-            >
-        </div>
-
-        <div class="mb-4">
             <label for="password" class="form-label">Password</label>
             <input
+                    name="password"
                     type="password"
                     class="form-control"
                     id="password"
@@ -148,18 +134,25 @@
             >
         </div>
 
-        <button type="submit" class="btn btn-save">
-            <i class="fas fa-save me-2"></i>Save Changes
+        <div class="mb-4 form-check">
+            <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="rememberMe"
+            >
+            <label class="form-check-label" for="rememberMe">Remember me?</label>
+        </div>
+
+        <button type="submit" class="btn btn-login">
+            <i class="fas fa-sign-in-alt me-2"></i>Login
         </button>
+
+        <c:if test="${not empty error}">
+            <div class="error-message">
+                    ${error}
+            </div>
+        </c:if>
     </form>
 </div>
-
-<script>
-    document.getElementById('editProfileForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        // Add your profile update logic here
-        alert('Profile update request submitted!');
-    });
-</script>
 </body>
 </html>

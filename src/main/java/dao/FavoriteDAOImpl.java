@@ -1,7 +1,6 @@
 package dao;
 
 import entity.Favorite;
-import utils.XJPA;
 
 import javax.persistence.*;
 import java.util.List;

@@ -1,7 +1,6 @@
 package dao;
 
 import entity.Share;
-import utils.XJPA;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;

@@ -10,7 +10,7 @@ public interface GenericDAO<T, ID> {
 
     Optional<T> findById(ID id);
 
-    void create(T entity) throws EntityExistsException;
+    boolean create(T entity) throws EntityExistsException;
 
     T update(T entity) throws EntityNotFoundException;
 
