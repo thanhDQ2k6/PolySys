@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,8 +75,12 @@
             border-radius: 12px;
             overflow: hidden;
             position: relative;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            aspect-ratio: 16/9;
+            height: auto;
             margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .video-player-placeholder {
@@ -168,82 +174,6 @@
             font-weight: 500;
         }
 
-        .recommended-videos {
-            background-color: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        .recommended-header {
-            font-weight: 500;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--brand-primary);
-        }
-
-        .recommended-item {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            padding: 0.5rem;
-            border-radius: 8px;
-            transition: background-color 0.2s ease;
-        }
-
-        .recommended-item:hover {
-            background-color: #f9f9f9;
-        }
-
-        .recommended-thumb {
-            flex: 0 0 40%;
-            border-radius: 6px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .recommended-thumb img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .recommended-duration {
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-        }
-
-        .recommended-content {
-            flex: 1;
-        }
-
-        .recommended-title {
-            font-weight: 500;
-            font-size: 0.95rem;
-            margin-bottom: 0.3rem;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .recommended-channel {
-            color: var(--text-light);
-            font-size: 0.85rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .recommended-views {
-            color: var(--text-light);
-            font-size: 0.8rem;
-        }
-
         @media (max-width: 992px) {
             .video-player-container {
                 margin-bottom: 2rem;
@@ -260,7 +190,7 @@
 <nav class="navbar navbar-expand-lg navbar-light sticky-top" style="background-color: #FFC107;">
     <div class="container-fluid">
         <!-- Brand with generous left padding -->
-        <a class="navbar-brand text-danger me-5" href="#">
+        <a class="navbar-brand text-danger me-5" href="${pageContext.request.contextPath}/video">
             <i class="bi bi-play-btn-fill me-2"></i>Online Entertainment
         </a>
 
@@ -277,7 +207,7 @@
 
                 <!-- My Favorites -->
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="#">
+                    <a class="nav-link text-dark" href="${pageContext.request.contextPath}/video/favorite">
                         <i class="bi bi-heart-fill"></i>My Favorites
                     </a>
                 </li>
@@ -289,13 +219,17 @@
                     </a>
                     <!-- Vertical dropdown menu -->
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-in-right"></i>Login</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-key"></i>Forgot Password</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-person-plus"></i>Registration</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-left"></i>Logoff</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-lock"></i>Change Password</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-pencil-square"></i>Edit Profile</a></li>
+                        <c:if test="${sessionScope.user == null}">
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/login"><i class="bi bi-box-arrow-in-right"></i>Login</a></li>
+                            <%--<li><a class="dropdown-item" href="#"><i class="bi bi-key"></i>Forgot Password</a></li>--%>
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/signup"><i class="bi bi-person-plus"></i>Registration</a></li>
+                        </c:if>
+
+                        <c:if test="${sessionScope.user != null}">
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/login?action=logout"><i class="bi bi-box-arrow-left"></i>Logoff</a></li>
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/changepwd"><i class="bi bi-lock"></i>Change Password</a></li>
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/account/editprofile"><i class="bi bi-pencil-square"></i>Edit Profile</a></li>
+                        </c:if>
                     </ul>
                 </li>
             </ul>
@@ -304,192 +238,32 @@
 </nav>
 
 <!-- Video Detail Content -->
-<div class="video-detail-container">
-    <div class="row">
-        <!-- Main Video Column (2/3 width) -->
-        <div class="col-lg-8">
-            <div class="video-player-container">
-                <div class="video-player-placeholder">
-                    <i class="bi bi-play-circle"></i>
-                </div>
-            </div>
-
-            <h1 class="video-title">Introduction to MySQL Database Design: Best Practices for Developers</h1>
-
-            <div class="video-meta">
-                <div class="video-stats">
-                    <span>125,450 views</span> •
-                    <span>Oct 15, 2023</span>
-                </div>
-                <div class="video-actions">
-                    <button class="btn btn-like active">
-                        <i class="bi bi-hand-thumbs-up-fill"></i> 2.5K
-                    </button>
-                    <button class="btn btn-share">
-                        <i class="bi bi-share"></i> Share
-                    </button>
-                </div>
-            </div>
-
-            <div class="video-description">
-                <h5>Description</h5>
-                <p>In this comprehensive tutorial, we explore the fundamentals of MySQL database design. Learn how to create efficient, scalable database structures that power modern applications.</p>
-
-                <p>Topics covered:</p>
-                <ul>
-                    <li>Understanding relational database concepts</li>
-                    <li>Entity-Relationship modeling</li>
-                    <li>Normalization techniques</li>
-                    <li>Indexing strategies for performance</li>
-                    <li>Best practices for schema design</li>
-                </ul>
-
-                <p>Whether you're a beginner or looking to refine your database design skills, this video provides practical insights you can apply to your projects immediately.</p>
-
-                <p class="mt-3">
-                    <strong>Tags:</strong>
-                    <span class="badge bg-light text-dark">MySQL</span>
-                    <span class="badge bg-light text-dark">Database Design</span>
-                    <span class="badge bg-light text-dark">SQL</span>
-                    <span class="badge bg-light text-dark">Backend Development</span>
-                </p>
-            </div>
+<div class="video-detail-container d-flex flex-column align-items-center justify-content-center">
+    <!-- Video Player -->
+    <div class="video-player-container w-100" style="max-width: 800px;">
+        <video id="mainVideo" class="w-100" style="border-radius:12px; background:#000;" controls poster="">
+            <source id="videoSource" src="" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <!-- Video Info -->
+    <h1 class="video-title mt-4" id="videoTitle">Đang tải...</h1>
+    <div class="video-meta mb-3" style="width:100%;max-width:800px;display:flex;justify-content:space-between;align-items:center;">
+        <div class="video-actions">
+            <button class="btn btn-like" id="likeBtn"><i class="bi bi-hand-thumbs-up"></i></button>
+            <button class="btn btn-share" id="shareBtn"><i class="bi bi-share"></i></button>
         </div>
-
-        <!-- Recommended Videos Column (1/3 width) -->
-        <div class="col-lg-4">
-            <div class="recommended-videos">
-                <h5 class="recommended-header">Recommended Videos</h5>
-
-                <!-- Recommended Video 1 -->
-                <div class="recommended-item">
-                    <div class="recommended-thumb">
-                        <div style="background: linear-gradient(45deg, #1d2b64, #f8cdda); height: 80px;"></div>
-                        <span class="recommended-duration">12:45</span>
-                    </div>
-                    <div class="recommended-content">
-                        <div class="recommended-title">Advanced SQL Queries: Joins, Subqueries and Window Functions</div>
-                        <div class="recommended-channel">Database Mastery</div>
-                        <div class="recommended-views">84K views • 2 weeks ago</div>
-                    </div>
-                </div>
-
-                <!-- Recommended Video 2 -->
-                <div class="recommended-item">
-                    <div class="recommended-thumb">
-                        <div style="background: linear-gradient(45deg, #614385, #516395); height: 80px;"></div>
-                        <span class="recommended-duration">18:30</span>
-                    </div>
-                    <div class="recommended-content">
-                        <div class="recommended-title">Database Indexing Explained: How to Optimize Query Performance</div>
-                        <div class="recommended-channel">Dev Insights</div>
-                        <div class="recommended-views">142K views • 1 month ago</div>
-                    </div>
-                </div>
-
-                <!-- Recommended Video 3 -->
-                <div class="recommended-item">
-                    <div class="recommended-thumb">
-                        <div style="background: linear-gradient(45deg, #11998e, #38ef7d); height: 80px;"></div>
-                        <span class="recommended-duration">22:15</span>
-                    </div>
-                    <div class="recommended-content">
-                        <div class="recommended-title">MySQL Security Best Practices: Protecting Your Data</div>
-                        <div class="recommended-channel">CyberDB</div>
-                        <div class="recommended-views">56K views • 3 weeks ago</div>
-                    </div>
-                </div>
-
-                <!-- Recommended Video 4 -->
-                <div class="recommended-item">
-                    <div class="recommended-thumb">
-                        <div style="background: linear-gradient(45deg, #ff512f, #dd2476); height: 80px;"></div>
-                        <span class="recommended-duration">14:20</span>
-                    </div>
-                    <div class="recommended-content">
-                        <div class="recommended-title">Understanding Database Normalization: 1NF, 2NF, 3NF with Examples</div>
-                        <div class="recommended-channel">Data Wizards</div>
-                        <div class="recommended-views">98K views • 2 months ago</div>
-                    </div>
-                </div>
-
-                <!-- Recommended Video 5 -->
-                <div class="recommended-item">
-                    <div class="recommended-thumb">
-                        <div style="background: linear-gradient(45deg, #1a2980, #26d0ce); height: 80px;"></div>
-                        <span class="recommended-duration">9:45</span>
-                    </div>
-                    <div class="recommended-content">
-                        <div class="recommended-title">Stored Procedures in MySQL: A Complete Guide</div>
-                        <div class="recommended-channel">Backend Simplified</div>
-                        <div class="recommended-views">67K views • 3 weeks ago</div>
-                    </div>
-                </div>
-
-                <!-- Recommended Video 6 -->
-                <div class="recommended-item">
-                    <div class="recommended-thumb">
-                        <div style="background: linear-gradient(45deg, #ff9966, #ff5e62); height: 80px;"></div>
-                        <span class="recommended-duration">16:10</span>
-                    </div>
-                    <div class="recommended-content">
-                        <div class="recommended-title">Database Transactions and ACID Properties Explained</div>
-                        <div class="recommended-channel">Data Foundations</div>
-                        <div class="recommended-views">112K views • 1 month ago</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    </div>
+    <div class="video-description w-100" style="max-width:800px;">
+        <h5>Description</h5>
+        <p id="videoDesc">Đang tải mô tả...</p>
     </div>
 </div>
 
 <!-- Footer -->
 <footer class="footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 mb-4">
-                <h5 class="text-light mb-4">Online Entertainment</h5>
-                <p>Your premier destination for educational videos and entertainment content. Learn, discover, and enjoy.</p>
-            </div>
-            <div class="col-md-2 mb-4">
-                <h5 class="text-light mb-4">Quick Links</h5>
-                <ul class="list-unstyled">
-                    <li class="mb-2"><a href="#" class="text-light text-decoration-none">Home</a></li>
-                    <li class="mb-2"><a href="#" class="text-light text-decoration-none">Videos</a></li>
-                    <li class="mb-2"><a href="#" class="text-light text-decoration-none">Categories</a></li>
-                    <li class="mb-2"><a href="#" class="text-light text-decoration-none">About Us</a></li>
-                </ul>
-            </div>
-            <div class="col-md-2 mb-4">
-                <h5 class="text-light mb-4">Account</h5>
-                <ul class="list-unstyled">
-                    <li class="mb-2"><a href="#" class="text-light text-decoration-none">Profile</a></li>
-                    <li class="mb-2"><a href="#" class="text-light text-decoration-none">Favorites</a></li>
-                    <li class="mb-2"><a href="#" class="text-light text-decoration-none">History</a></li>
-                    <li class="mb-2"><a href="#" class="text-light text-decoration-none">Settings</a></li>
-                </ul>
-            </div>
-            <div class="col-md-4 mb-4">
-                <h5 class="text-light mb-4">Subscribe</h5>
-                <p>Get notified about new content and features</p>
-                <div class="input-group">
-                    <input type="email" class="form-control" placeholder="Your email address">
-                    <button class="btn btn-warning" type="button">Subscribe</button>
-                </div>
-            </div>
-        </div>
-        <hr class="border-light">
-        <div class="row">
-            <div class="col-md-6 mb-3 mb-md-0">
-                <p class="mb-0">&copy; 2023 Online Entertainment. All rights reserved.</p>
-            </div>
-            <div class="col-md-6 text-md-end">
-                <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
-                <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
-                <a href="#" class="text-light"><i class="bi bi-youtube"></i></a>
-            </div>
-        </div>
+    <div class="container text-center py-4">
+        <p class="mb-0">&copy; 2025 Online Entertainment. All rights reserved.</p>
     </div>
 </footer>
 
@@ -497,19 +271,106 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // Add interactivity to like buttons
-    document.querySelectorAll('.btn-like').forEach(button => {
-        button.addEventListener('click', function() {
-            const isActive = this.classList.contains('active');
-            if (isActive) {
-                this.classList.remove('active');
-                this.innerHTML = '<i class="bi bi-hand-thumbs-up"></i> Like';
-            } else {
-                this.classList.add('active');
-                this.innerHTML = '<i class="bi bi-hand-thumbs-up-fill"></i> Liked';
+    // --- Lấy id video từ URL ---
+    function getQueryParam(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name);
+    }
+    const videoId = getQueryParam('id');
+
+    // --- Kiểm tra video đã like chưa ---
+    let liked = false;
+    async function checkLiked() {
+        try {
+            const res = await fetch("${pageContext.request.contextPath}/video/api/liked");
+            if (!res.ok) return false;
+            const likedIds = await res.json();
+            return likedIds.includes(videoId);
+        } catch (e) {
+            return false;
+        }
+    }
+
+    // --- Fetch video detail từ API ---
+    async function fetchVideoDetail() {
+        if (!videoId) {
+            document.getElementById('videoTitle').textContent = 'Không tìm thấy video!';
+            return;
+        }
+        try {
+            const res = await fetch(window.location.origin + '${pageContext.request.contextPath}/video/api/detail?id=' + videoId);
+            if (!res.ok) throw new Error('Không tìm thấy video!');
+            const video = await res.json();
+            // --- Fix: Defensive check for video object and YouTube link ---
+            if (!video || !video.link) {
+                document.getElementById('videoTitle').textContent = 'Không tìm thấy video!';
+                document.querySelector('.video-player-container').innerHTML = '';
+                document.getElementById('videoDesc').textContent = '';
+                return;
             }
-        });
+            const videoPlayerContainer = document.querySelector('.video-player-container');
+            videoPlayerContainer.innerHTML = '';
+            // --- YouTube embed: support both youtube.com and youtu.be links ---
+            let youtubeId = '';
+            if (video.link.includes('youtube.com')) {
+                const match = video.link.match(/[?&]v=([^&]+)/);
+                if (match) youtubeId = match[1];
+            } else if (video.link.includes('youtu.be')) {
+                const match = video.link.match(/youtu\.be\/([^?&]+)/);
+                if (match) youtubeId = match[1];
+            }
+            if (youtubeId) {
+                videoPlayerContainer.innerHTML = '<iframe width="100%" height="100%" style="aspect-ratio:16/9;border-radius:12px;" src="https://www.youtube.com/embed/' + youtubeId + '" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+            } else if (video.link.match(/^https?:\/\/.+\.(mp4|webm|ogg)$/i)) {
+                // If it's a direct video file
+                videoPlayerContainer.innerHTML = '<video id="mainVideo" class="w-100" style="border-radius:12px; background:#000;" controls poster="' + (video.posterUrl || '') + '"><source id="videoSource" src="' + video.link + '" type="video/mp4">Your browser does not support the video tag.</video>';
+            } else {
+                videoPlayerContainer.innerHTML = '<div class="video-player-placeholder">Không phát được video này!</div>';
+            }
+            document.getElementById('videoTitle').textContent = video.title || 'Không tìm thấy video!';
+            document.getElementById('videoDesc').textContent = video.description || '';
+            // Add share button redirect logic
+            const shareBtn = document.getElementById('shareBtn');
+            if (shareBtn && video.link) {
+                shareBtn.onclick = function() {
+                    window.open(video.link, '_blank');
+                };
+            }
+        } catch (e) {
+            document.getElementById('videoTitle').textContent = 'Không tìm thấy video!';
+            document.querySelector('.video-player-container').innerHTML = '';
+            document.getElementById('videoDesc').textContent = '';
+        }
+    }
+
+    // --- Like button logic ---
+    async function updateLikeBtn() {
+        liked = await checkLiked();
+        const btn = document.getElementById('likeBtn');
+        if (liked) {
+            btn.classList.add('active');
+            btn.innerHTML = '<i class="bi bi-heart-fill"></i>';
+        } else {
+            btn.classList.remove('active');
+            btn.innerHTML = '<i class="bi bi-heart"></i>';
+        }
+    }
+    document.getElementById('likeBtn').addEventListener('click', async function(e) {
+        e.preventDefault();
+        try {
+            const res = await fetch(`${pageContext.request.contextPath}/video/api/like?videoId=" + videoId`, { method: 'POST' });
+            if (!res.ok) throw new Error('Lỗi like video');
+            const data = await res.json();
+            liked = data.liked;
+            updateLikeBtn();
+        } catch (err) {
+            alert('Bạn cần đăng nhập để like video!');
+        }
     });
+
+    // --- Khởi động ---
+    fetchVideoDetail();
+    updateLikeBtn();
 </script>
 </body>
 </html>

@@ -20,6 +20,13 @@ public class LoginServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String action = request.getParameter("action");
+        if ("logout".equals(action)) {
+            // Invalidate session and redirect to login page
+            request.getSession().invalidate();
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
         request.getRequestDispatcher("/view/account/login.jsp").forward(request, response);
     }
 

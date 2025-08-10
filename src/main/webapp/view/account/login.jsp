@@ -134,18 +134,23 @@
             >
         </div>
 
-        <div class="mb-4 form-check">
-            <input
-                    type="checkbox"
-                    class="form-check-input"
-                    id="rememberMe"
-            >
-            <label class="form-check-label" for="rememberMe">Remember me?</label>
-        </div>
+<%--        <div class="mb-4 form-check">--%>
+<%--            <input--%>
+<%--                    type="checkbox"--%>
+<%--                    class="form-check-input"--%>
+<%--                    id="rememberMe"--%>
+<%--            >--%>
+<%--            <label class="form-check-label" for="rememberMe">Remember me?</label>--%>
+<%--        </div>--%>
 
         <button type="submit" class="btn btn-login">
             <i class="fas fa-sign-in-alt me-2"></i>Login
         </button>
+
+        <hr style="margin: 2rem 0;">
+        <a href="${pageContext.request.contextPath}/video" class="btn btn-secondary w-100">
+            <i class="bi bi-house-door"></i> Return to Home
+        </a>
 
         <c:if test="${not empty error}">
             <div class="error-message">

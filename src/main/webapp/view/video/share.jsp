@@ -111,17 +111,17 @@
     </div>
 
     <form id="shareForm">
-        <div class="mb-4">
-            <label for="friendEmail" class="form-label">Your friend's email?</label>
-            <input
-                    type="email"
-                    class="form-control"
-                    id="friendEmail"
-                    placeholder="name@example.com"
-                    required
-            >
-            <div class="validation-message" id="emailValidation"></div>
-        </div>
+<%--        <div class="mb-4">--%>
+<%--            <label for="friendEmail" class="form-label">Your friend's email?</label>--%>
+<%--            <input--%>
+<%--                    type="email"--%>
+<%--                    class="form-control"--%>
+<%--                    id="friendEmail"--%>
+<%--                    placeholder="name@example.com"--%>
+<%--                    required--%>
+<%--            >--%>
+<%--            <div class="validation-message" id="emailValidation"></div>--%>
+<%--        </div>--%>
 
         <button type="submit" class="btn btn-send">
             <i class="fas fa-paper-plane me-2"></i>Send

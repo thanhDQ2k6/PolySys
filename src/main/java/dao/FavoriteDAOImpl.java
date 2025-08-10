@@ -39,7 +39,7 @@ public class FavoriteDAOImpl implements FavoriteDAO {
     public void create(Favorite favorite) throws EntityExistsException {
         try {
             em.getTransaction().begin();
-            if (favorite.getUser() != null && favorite.getVideo() != null && findByUserAndVideo(favorite.getUser().getId(), favorite.getVideo().getId()) != null) {
+            if (favorite.getUser() != null && favorite.getVideo() != null && findByUserAndVideo(favorite.getUser().getId(), favorite.getVideo().getId()).isPresent()) {
                 throw new EntityExistsException("Favorite already exists: " + favorite.getId());
             }
             em.persist(favorite);
