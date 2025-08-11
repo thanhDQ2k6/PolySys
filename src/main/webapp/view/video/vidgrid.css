@@ -234,15 +234,6 @@ body {
     color: white;
 }
 
-.btn-nav.active {
-    background-color: var(--brand-primary);
-    color: #fff;
-    border-color: var(--brand-primary);
-    font-weight: bold;
-    box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--brand-primary);
-    z-index: 1;
-}
-
 .search-container {
     padding-right: 1.5rem; /* Thick right padding */
 }
