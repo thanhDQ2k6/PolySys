@@ -7,12 +7,297 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Gallery | Online Entertainment</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
-    <c:url var="css" value="/view/video/vidgrid.css" />
-    <link rel="stylesheet" href="${css}">
+    <style>
+        :root {
+            --brand-primary: #FFC107;
+            --brand-secondary: #212529;
+            --card-light: #ffffff;
+            --card-dark: #f8f9fa;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            padding-left: 2rem;
+        }
+
+        .nav-item {
+            margin: 0 0.8rem;
+        }
+
+        .nav-link {
+            font-size: 1.1rem;
+            font-weight: 500;
+            padding: 0.8rem 1.2rem !important;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-link i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        .gallery-container {
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            flex: 1;
+        }
+
+        .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 0 1.5rem;
+        }
+
+        .gallery-title {
+            font-weight: 700;
+            color: var(--brand-secondary);
+            position: relative;
+            padding-bottom: 0.5rem;
+            padding-left: 1.5rem; /* Thick left padding */
+            font-size: 2rem;
+        }
+
+        .gallery-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 1.5rem; /* Align with title padding */
+            width: 60px;
+            height: 4px;
+            background: var(--brand-primary);
+            border-radius: 2px;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 columns */
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .video-card {
+            border-radius: 12px;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: white;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-thumb {
+            height: 120px;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            /*top: 0;*/
+            /*left: 0;*/
+        }
+
+        .video-thumb i {
+            font-size: 4rem;
+            color: rgba(0, 0, 0, 0.1);
+        }
+
+        .video-thumb::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.3));
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .video-content {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-title {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            flex: 1;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: auto;
+        }
+
+        .btn-like, .btn-share {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            padding: 0.5rem;
+        }
+
+        .btn-like {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+        }
+
+        .btn-like:hover {
+            background-color: #fff5f5;
+            color: #dc3545;
+        }
+
+        .btn-like.active {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-share {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+        }
+
+        .btn-share:hover {
+            background-color: #f0f7ff;
+            color: #0d6efd;
+        }
+
+        .pagination-nav {
+            display: flex;
+            justify-content: center;
+            margin: 3rem 0 2rem;
+        }
+
+        .pagination-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-nav {
+            width: 45px;
+            height: 45px;
+            border-radius: 50% !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            border: 1px solid #dee2e6;
+            transition: all 0.2s ease;
+        }
+
+        .btn-nav:hover {
+            background-color: var(--brand-primary);
+            border-color: var(--brand-primary);
+            color: white;
+        }
+
+        .search-container {
+            padding-right: 1.5rem; /* Thick right padding */
+        }
+
+        .footer {
+            background-color: var(--brand-secondary);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 3rem 0;
+            margin-top: auto;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .video-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .video-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .gallery-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .search-container {
+                padding-left: 1.5rem;
+                padding-right: 0;
+                width: 100%;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-title {
+                padding-left: 0;
+            }
+
+            .gallery-title:after {
+                left: 0;
+            }
+        }
+    </style>
 </head>
 <body>
 <!-- Professional Navbar -->
@@ -100,7 +385,7 @@
 </footer>
 
 <!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
 // --- Cấu hình phân trang ---
