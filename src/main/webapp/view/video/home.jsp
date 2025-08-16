@@ -435,6 +435,7 @@ function renderPage(page) {
     const pageVideos = videos.slice(start, end);
     let html = '';
     pageVideos.forEach(function(video) {
+        console.log('Rendering video:', video); // Debug: check video object and id
         const liked = likedIds.includes(video.id);
         html += '<div class="video-card" data-id="' + video.id + '">';
         html +=   '<img class="video-thumb" src="' + video.posterUrl + '" alt="' + video.title + '" style="width:100%;height:120px;object-fit:cover;border-radius:8px;display:block;">';
@@ -452,8 +453,11 @@ function renderPage(page) {
     document.querySelectorAll('.video-card').forEach(card => {
         card.addEventListener('click', function(e) {
             if (!e.target.classList.contains('btn-like') && !e.target.classList.contains('btn-share')) {
-                // Chuyển sang detail.jsp, truyền id qua query string
-                window.location.href = "${pageContext.request.contextPath}/video/detail?id=" + this.dataset.id;
+                // Luôn lấy video-card gần nhất để lấy dataset.id
+                const videoCard = e.target.closest('.video-card');
+                if (videoCard && videoCard.dataset.id) {
+                    window.location.href = "${pageContext.request.contextPath}/video/detail?id=" + videoCard.dataset.id;
+                }
             }
         });
     });
@@ -487,10 +491,8 @@ function renderPage(page) {
             e.stopPropagation();
             const card = this.closest('.video-card');
             const videoId = card.dataset.id;
-            const video = videos.find(v => v.id === videoId);
-            if (video && video.link) {
-                window.open(video.link, '_blank');
-            }
+            // Chuyển hướng sang trang share
+            window.location.href = `${pageContext.request.contextPath}/video/share?id=` + videoId;
         });
     });
 }

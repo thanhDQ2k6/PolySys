@@ -493,10 +493,8 @@
                 e.stopPropagation();
                 const card = this.closest('.video-card');
                 const videoId = card.dataset.id;
-                const video = videos.find(v => v.id === videoId);
-                if (video && video.link) {
-                    window.open(video.link, '_blank');
-                }
+                // Chuyển hướng sang trang share
+                window.location.href = `${pageContext.request.contextPath}/video/share?id=` + videoId;
             });
         });
     }

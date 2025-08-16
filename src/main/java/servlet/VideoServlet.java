@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -96,7 +98,27 @@ public class VideoServlet extends HttpServlet {
             // Tạm thời forward về home.jsp
             request.getRequestDispatcher("/view/video/home.jsp").forward(request, response);
         } else if (path.equals("/detail")) {
-            // Chi tiết video (API JSON hoặc forward đến trang detail)
+            // --- View count logic ---
+            String videoId = request.getParameter("id");
+            if (videoId != null && !videoId.isEmpty()) {
+                // Lấy danh sách đã xem từ session
+                @SuppressWarnings("unchecked")
+                Set<String> viewedVideos = (Set<String>) request.getSession().getAttribute("viewedVideos");
+                if (viewedVideos == null) {
+                    viewedVideos = new HashSet<>();
+                }
+                if (!viewedVideos.contains(videoId)) {
+                    // Chưa xem trong session này, tăng view
+                    try (XJPA jpa = new XJPA()) {
+                        EntityManager em = jpa.getEntityManager();
+                        VideoDAO videoDAO = new VideoDAOImpl(em);
+                        videoDAO.increaseView(videoId); // Tăng view
+                    }
+                    viewedVideos.add(videoId);
+                    request.getSession().setAttribute("viewedVideos", viewedVideos);
+                }
+            }
+            // Forward về detail.jsp như cũ
             request.getRequestDispatcher("/view/video/detail.jsp").forward(request, response);
         } else if (path.equals("/favorite")) {
             // Danh sách video đã like (favorite)
@@ -151,6 +173,29 @@ public class VideoServlet extends HttpServlet {
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write("{\"liked\":" + liked + "}");
             }
+        }
+        if ("/api/share".equals(path)) {
+            // Lấy thông tin từ request
+            String recipientEmail = request.getParameter("recipientEmail");
+            String videoTitle = request.getParameter("videoTitle");
+            String youtubeLink = request.getParameter("youtubeLink");
+            // Kiểm tra đầu vào
+            if (recipientEmail == null || recipientEmail.isEmpty() ||
+                videoTitle == null || videoTitle.isEmpty() ||
+                youtubeLink == null || youtubeLink.isEmpty()) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write("{\"error\":\"Thiếu thông tin chia sẻ\"}");
+                return;
+            }
+            try {
+                util.EmailUtil.constructAndSendShareEmail(recipientEmail, videoTitle, youtubeLink);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"success\":true}");
+            } catch (Exception e) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().write("{\"error\":\"Gửi email thất bại: " + e.getMessage() + "\"}");
+            }
+            return;
         }
     }
 }

@@ -331,9 +331,10 @@
             document.getElementById('videoDesc').textContent = video.description || '';
             // Add share button redirect logic
             const shareBtn = document.getElementById('shareBtn');
-            if (shareBtn && video.link) {
+            if (shareBtn && video.id) {
                 shareBtn.onclick = function() {
-                    window.open(video.link, '_blank');
+                    window.location.href = window.location.origin +
+                        '/PolySys_war/video/share?id=' + video.id;
                 };
             }
         } catch (e) {

@@ -123,4 +123,22 @@ public class VideoDAOImpl implements VideoDAO {
             return 0;
         }
     }
+
+    @Override
+    public void increaseView(String videoId) {
+        try {
+            em.getTransaction().begin();
+            Video video = em.find(Video.class, videoId);
+            if (video != null) {
+                video.setViews(video.getViews() + 1); // Tăng view
+                em.merge(video);
+            }
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
+        }
+    }
 }
