@@ -2,7 +2,10 @@ package servlet;
 
 import dao.UserDAO;
 import dao.UserDAOImpl;
+import dao.VideoDAO;
+import dao.VideoDAOImpl;
 import entity.User;
+import entity.Video;
 import util.XJPA;
 
 import javax.persistence.EntityManager;
@@ -45,8 +48,21 @@ public class AdminServlet extends HttpServlet {
                 request.getRequestDispatcher("/view/admin/userManagement.jsp").forward(request, response);
             }
         } else if (uri.contains("/admin/video")) {
-            // Load video management page
-            request.getRequestDispatcher("/view/admin/videosManagement.jsp").forward(request, response);
+            // Load video list for video management page
+            try (XJPA tx = new XJPA()) {
+                EntityManager em = tx.getEntityManager();
+                VideoDAO videoDAO = new VideoDAOImpl(em);
+                
+                List<Video> videoList = videoDAO.findAll();
+                request.setAttribute("videoList", videoList);
+                request.setAttribute("totalVideos", videoList.size());
+                
+                request.getRequestDispatcher("/view/admin/videosManagement.jsp").forward(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+                request.setAttribute("error", "Error loading video data: " + e.getMessage());
+                request.getRequestDispatcher("/view/admin/videosManagement.jsp").forward(request, response);
+            }
         } else if (uri.contains("/admin/reports")) {
             // Load reports page
             request.getRequestDispatcher("/view/admin/reports.jsp").forward(request, response);
