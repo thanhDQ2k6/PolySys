@@ -367,6 +367,27 @@
             display: none !important;
         }
 
+        /* Badge Styles */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border-radius: 4px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .badge-primary {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        .badge-danger {
+            background-color: #e74c3c;
+            color: #fff;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 width: 70px;
@@ -417,8 +438,22 @@
     <!-- User Edition Section -->
     <section id="userEdition" class="section">
         <h3><i class="fas fa-user-cog"></i> User Management</h3>
-        <form id="userForm">
+        
+        <!-- Success/Error Messages -->
+        <c:if test="${not empty success}">
+            <div class="alert alert-success" style="background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 12px; border-radius: 4px; margin-bottom: 20px;">
+                <i class="fas fa-check-circle"></i> ${success}
+            </div>
+        </c:if>
+        
+        <c:if test="${not empty error}">
+            <div class="alert alert-danger" style="background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 4px; margin-bottom: 20px;">
+                <i class="fas fa-exclamation-circle"></i> ${error}
+            </div>
+        </c:if>
+        <form id="userForm" method="post" action="${pageContext.request.contextPath}/admin/user">
             <input type="hidden" id="userId" name="userId">
+            <input type="hidden" id="action" name="action" value="create">
 
             <div class="form-group">
                 <label for="fullName" class="form-label">Full Name</label>
@@ -438,26 +473,26 @@
             <div class="form-group">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" id="password" name="password" class="form-control" required>
-                <small class="form-text text-muted">Leave blank to keep current password</small>
+                <small class="form-text text-muted">Leave blank to keep current password when editing</small>
             </div>
 
             <fieldset>
                 <legend>Role</legend>
                 <div class="radio-group">
                     <div class="radio-option">
-                        <input type="radio" id="roleAdmin" name="role" value="true">
+                        <input type="radio" id="roleAdmin" name="admin" value="true">
                         <label for="roleAdmin">Admin</label>
                     </div>
                     <div class="radio-option">
-                        <input type="radio" id="roleUser" name="role" value="false" checked>
+                        <input type="radio" id="roleUser" name="admin" value="false" checked>
                         <label for="roleUser">Regular User</label>
                     </div>
                 </div>
             </fieldset>
 
             <div class="btn-group">
-                <button class="btn btn-primary" type="button" onclick="updateUser()">
-                    <i class="fas fa-save"></i> Update
+                <button class="btn btn-primary" type="submit" onclick="updateUser(event)">
+                    <i class="fas fa-save"></i> <span id="submitText">Create</span>
                 </button>
                 <button class="btn btn-danger" type="button" onclick="deleteUser()">
                     <i class="fas fa-trash"></i> Delete
@@ -487,7 +522,7 @@
                 <c:forEach var="user" items="${userList}">
                     <tr>
                         <td>${user.fullName}</td>
-                        <td>${user.username}</td>
+                        <td>${user.id}</td>
                         <td>${user.email}</td>
                         <td>
                             <span class="badge ${user.admin ? 'badge-danger' : 'badge-primary'}">
@@ -496,7 +531,7 @@
                         </td>
                         <td class="table-actions">
                             <button class="btn btn-primary"
-                                    onclick="loadUserForEdit('${user.id}', '${user.fullName}', '${user.username}', '${user.email}', ${user.admin})">
+                                    onclick="loadUserForEdit('${user.id}', '${user.fullName}', '${user.email}', ${user.admin})">
                                 <i class="fas fa-edit"></i> Edit
                             </button>
                         </td>
@@ -536,13 +571,15 @@
     }
 
     // Load user data into form for editing
-    function loadUserForEdit(id, fullName, username, email, isAdmin) {
+    function loadUserForEdit(id, fullName, email, isAdmin) {
         document.getElementById('userId').value = id;
         document.getElementById('fullName').value = fullName;
-        document.getElementById('username').value = username;
+        document.getElementById('username').value = id; // username is the id
         document.getElementById('email').value = email;
         document.getElementById('password').value = '';
         document.getElementById('password').required = false;
+        document.getElementById('action').value = 'update';
+        document.getElementById('submitText').textContent = 'Update';
 
         if (isAdmin) {
             document.getElementById('roleAdmin').checked = true;
@@ -558,33 +595,25 @@
         document.getElementById('userForm').reset();
         document.getElementById('userId').value = '';
         document.getElementById('password').required = true;
+        document.getElementById('action').value = 'create';
+        document.getElementById('submitText').textContent = 'Create';
+        document.getElementById('username').disabled = false;
     }
 
     // Update user
-    function updateUser() {
+    function updateUser(event) {
+        event.preventDefault();
+        
         const userId = document.getElementById('userId').value;
         const isNewUser = userId === '';
-
-        // Get form data
-        const formData = {
-            id: userId,
-            fullName: document.getElementById('fullName').value,
-            username: document.getElementById('username').value,
-            email: document.getElementById('email').value,
-            password: document.getElementById('password').value,
-            admin: document.getElementById('roleAdmin').checked
-        };
-
-        // Here you would typically make an AJAX call to your backend
-        console.log('User data to save:', formData);
-
-        // Simulate success
-        alert(isNewUser ? 'User created successfully!' : 'User updated successfully!');
-
-        // For demo purposes, reset form if new user
-        if (isNewUser) {
-            resetUserForm();
+        
+        // For existing users, disable username field as it cannot be changed
+        if (!isNewUser) {
+            document.getElementById('username').disabled = true;
         }
+
+        // Submit the form
+        document.getElementById('userForm').submit();
     }
 
     // Delete user
@@ -597,12 +626,25 @@
         }
 
         if (confirm('Are you sure you want to delete this user?')) {
-            // Here you would typically make an AJAX call to your backend
-            console.log('Deleting user with ID:', userId);
-
-            // Simulate success
-            alert('User deleted successfully!');
-            resetUserForm();
+            // Create a form to submit delete action
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '${pageContext.request.contextPath}/admin/user';
+            
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = 'delete';
+            
+            const userIdInput = document.createElement('input');
+            userIdInput.type = 'hidden';
+            userIdInput.name = 'userId';
+            userIdInput.value = userId;
+            
+            form.appendChild(actionInput);
+            form.appendChild(userIdInput);
+            document.body.appendChild(form);
+            form.submit();
         }
     }
 
