@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -366,6 +367,19 @@
         .hidden {
             display: none !important;
         }
+        
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
 
         @media (max-width: 768px) {
             .sidebar {
@@ -405,6 +419,12 @@
 </div>
 
 <main class="main-content">
+    <c:if test="${not empty error}">
+        <div class="alert alert-danger" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> ${error}
+        </div>
+    </c:if>
+    
     <div class="tabs">
         <button class="tab active" onclick="showTab('favoritesTab')">
             <i class="fas fa-heart"></i> Favorites
@@ -432,12 +452,23 @@
                 </tr>
                 </thead>
                 <tbody id="favoritesTableBody">
-                    <!-- Data will be loaded dynamically -->
-                    <tr>
-                        <td colspan="4" class="text-center">
-                            <i class="fas fa-spinner fa-spin"></i> Loading favorites data...
-                        </td>
-                    </tr>
+                    <!-- Data will be loaded from database -->
+                    <c:choose>
+                        <c:when test="${empty favoritesList}">
+                            <tr>
+                                <td colspan="4" class="text-center">
+                                    <i class="fas fa-info-circle"></i> No favorites data found.
+                                </td>
+                            </tr>
+                        </c:when>
+                        <c:otherwise>
+                            <tr>
+                                <td colspan="4" class="text-center">
+                                    <i class="fas fa-spinner fa-spin"></i> Loading favorites data...
+                                </td>
+                            </tr>
+                        </c:otherwise>
+                    </c:choose>
                 </tbody>
             </table>
         </div>
@@ -481,11 +512,22 @@
                 </tr>
                 </thead>
                 <tbody id="favoriteUsersTableBody">
-                    <tr>
-                        <td colspan="5" class="text-center">
-                            <i class="fas fa-spinner fa-spin"></i> Loading users data...
-                        </td>
-                    </tr>
+                    <c:choose>
+                        <c:when test="${empty favoritesList}">
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <i class="fas fa-info-circle"></i> No users data found.
+                                </td>
+                            </tr>
+                        </c:when>
+                        <c:otherwise>
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <i class="fas fa-spinner fa-spin"></i> Loading users data...
+                                </td>
+                            </tr>
+                        </c:otherwise>
+                    </c:choose>
                 </tbody>
             </table>
         </div>
@@ -529,11 +571,22 @@
                 </tr>
                 </thead>
                 <tbody id="sharedFriendsTableBody">
-                    <tr>
-                        <td colspan="5" class="text-center">
-                            <i class="fas fa-spinner fa-spin"></i> Loading shares data...
-                        </td>
-                    </tr>
+                    <c:choose>
+                        <c:when test="${empty sharesList}">
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <i class="fas fa-info-circle"></i> No shares data found.
+                                </td>
+                            </tr>
+                        </c:when>
+                        <c:otherwise>
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <i class="fas fa-spinner fa-spin"></i> Loading shares data...
+                                </td>
+                            </tr>
+                        </c:otherwise>
+                    </c:choose>
                 </tbody>
             </table>
         </div>
@@ -555,38 +608,75 @@
 </main>
 
 <script>
-    // Sample data for demo purposes
-    const sampleVideos = [
-        { id: 'dQw4w9WgXcQ', title: 'Never Gonna Give You Up' },
-        { id: 'L_jWHffIx5E', title: 'Smells Like Teen Spirit' },
-        { id: 'fJ9rUzIMcZQ', title: 'Bohemian Rhapsody' },
-        { id: 'kffacxfA7G4', title: 'Baby One More Time' },
-        { id: 'hTWKbfoikeg', title: 'Somebody That I Used to Know' }
+    // Load data from server-side attributes instead of hardcoded samples
+    const videoList = [
+        <c:forEach var="video" items="${videoList}" varStatus="status">
+        { id: '${video.id}', title: '${fn:escapeXml(video.title)}' }<c:if test="${!status.last}">,</c:if>
+        </c:forEach>
     ];
 
-    const sampleFavorites = [
-        { videoTitle: 'Never Gonna Give You Up', count: 15, latest: '2024-01-15', oldest: '2023-12-01' },
-        { videoTitle: 'Smells Like Teen Spirit', count: 8, latest: '2024-01-10', oldest: '2023-11-15' },
-        { videoTitle: 'Bohemian Rhapsody', count: 12, latest: '2024-01-12', oldest: '2023-10-20' },
-        { videoTitle: 'Baby One More Time', count: 6, latest: '2024-01-08', oldest: '2023-12-10' },
-        { videoTitle: 'Somebody That I Used to Know', count: 9, latest: '2024-01-14', oldest: '2023-11-28' }
+    // Process favorites data to create report format
+    const favoritesList = [
+        <c:forEach var="favorite" items="${favoritesList}" varStatus="status">
+        {
+            videoId: '${favorite.video.id}',
+            videoTitle: '${fn:escapeXml(favorite.video.title)}',
+            userId: '${favorite.user.id}',
+            userName: '${fn:escapeXml(favorite.user.fullName)}',
+            userEmail: '${fn:escapeXml(favorite.user.email)}',
+            likeDate: '${favorite.likeDate}'
+        }<c:if test="${!status.last}">,</c:if>
+        </c:forEach>
     ];
 
-    const sampleFavoriteUsers = [
-        { username: 'john_doe', fullName: 'John Doe', email: 'john@example.com', date: '2024-01-15', videoTitle: 'Never Gonna Give You Up' },
-        { username: 'jane_smith', fullName: 'Jane Smith', email: 'jane@example.com', date: '2024-01-14', videoTitle: 'Bohemian Rhapsody' },
-        { username: 'mike_wilson', fullName: 'Mike Wilson', email: 'mike@example.com', date: '2024-01-13', videoTitle: 'Smells Like Teen Spirit' },
-        { username: 'sarah_johnson', fullName: 'Sarah Johnson', email: 'sarah@example.com', date: '2024-01-12', videoTitle: 'Never Gonna Give You Up' },
-        { username: 'david_brown', fullName: 'David Brown', email: 'david@example.com', date: '2024-01-11', videoTitle: 'Baby One More Time' }
+    // Process shares data
+    const sharesList = [
+        <c:forEach var="share" items="${sharesList}" varStatus="status">
+        {
+            videoId: '${share.video.id}',
+            videoTitle: '${fn:escapeXml(share.video.title)}',
+            senderName: '${fn:escapeXml(share.user.fullName)}',
+            senderEmail: '${fn:escapeXml(share.user.email)}',
+            receiverEmail: '${fn:escapeXml(share.emails)}',
+            shareDate: '${share.shareDate}'
+        }<c:if test="${!status.last}">,</c:if>
+        </c:forEach>
     ];
 
-    const sampleShares = [
-        { senderName: 'John Doe', senderEmail: 'john@example.com', receiverEmail: 'friend1@example.com', date: '2024-01-15', videoTitle: 'Never Gonna Give You Up' },
-        { senderName: 'Jane Smith', senderEmail: 'jane@example.com', receiverEmail: 'friend2@example.com', date: '2024-01-14', videoTitle: 'Bohemian Rhapsody' },
-        { senderName: 'Mike Wilson', senderEmail: 'mike@example.com', receiverEmail: 'friend3@example.com', date: '2024-01-13', videoTitle: 'Smells Like Teen Spirit' },
-        { senderName: 'Sarah Johnson', senderEmail: 'sarah@example.com', receiverEmail: 'friend4@example.com', date: '2024-01-12', videoTitle: 'Never Gonna Give You Up' },
-        { senderName: 'David Brown', senderEmail: 'david@example.com', receiverEmail: 'friend5@example.com', date: '2024-01-11', videoTitle: 'Baby One More Time' }
-    ];
+    // Generate favorites report data from processed favorites
+    const favoritesReportData = generateFavoritesReport(favoritesList);
+    
+    function generateFavoritesReport(favorites) {
+        const videoStats = {};
+        
+        // Group favorites by video
+        favorites.forEach(fav => {
+            if (!videoStats[fav.videoId]) {
+                videoStats[fav.videoId] = {
+                    videoTitle: fav.videoTitle,
+                    count: 0,
+                    dates: []
+                };
+            }
+            videoStats[fav.videoId].count++;
+            videoStats[fav.videoId].dates.push(fav.likeDate);
+        });
+        
+        // Convert to report format
+        const reportData = [];
+        Object.keys(videoStats).forEach(videoId => {
+            const stats = videoStats[videoId];
+            const dates = stats.dates.sort();
+            reportData.push({
+                videoTitle: stats.videoTitle,
+                count: stats.count,
+                latest: dates.length > 0 ? dates[dates.length - 1] : '',
+                oldest: dates.length > 0 ? dates[0] : ''
+            });
+        });
+        
+        return reportData;
+    }
 
     // Initialize page
     document.addEventListener('DOMContentLoaded', function() {
@@ -597,12 +687,12 @@
         // Load video options for dropdowns
         loadVideoOptions();
         
-        // Load initial data for active tab
+        // Load data for active tab
         setTimeout(() => {
             loadFavoritesData();
             loadFavoriteUsersData();
             loadSharedFriendsData();
-        }, 1000); // Simulate loading delay
+        }, 100); // Small delay to ensure DOM is ready
     }
 
     function loadVideoOptions() {
@@ -613,8 +703,8 @@
         videoSelect.innerHTML = '<option value="">All Videos</option>';
         sharedVideoSelect.innerHTML = '<option value="">All Videos</option>';
         
-        // Add video options
-        sampleVideos.forEach(video => {
+        // Add video options from server data
+        videoList.forEach(video => {
             const option1 = document.createElement('option');
             option1.value = video.id;
             option1.textContent = video.title;
@@ -634,19 +724,19 @@
         // Clear loading message
         tbody.innerHTML = '';
         
-        // Add data rows
-        sampleFavorites.forEach(fav => {
+        // Add data rows from server data
+        favoritesReportData.forEach(fav => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${fav.videoTitle}</td>
-                <td>${fav.count}</td>
-                <td>${fav.latest}</td>
-                <td>${fav.oldest}</td>
+                <td>\${fav.videoTitle}</td>
+                <td>\${fav.count}</td>
+                <td>\${fav.latest}</td>
+                <td>\${fav.oldest}</td>
             `;
             tbody.appendChild(row);
         });
         
-        count.textContent = `Showing ${sampleFavorites.length} records`;
+        count.textContent = `Showing \${favoritesReportData.length} records`;
     }
 
     function loadFavoriteUsersData(videoId = '') {
@@ -654,12 +744,9 @@
         const count = document.getElementById('favoriteUsersCount');
         
         // Filter data based on video selection
-        let filteredData = sampleFavoriteUsers;
+        let filteredData = favoritesList;
         if (videoId) {
-            const selectedVideo = sampleVideos.find(v => v.id === videoId);
-            if (selectedVideo) {
-                filteredData = sampleFavoriteUsers.filter(u => u.videoTitle === selectedVideo.title);
-            }
+            filteredData = favoritesList.filter(f => f.videoId === videoId);
         }
         
         // Clear existing data
@@ -669,16 +756,16 @@
         filteredData.forEach(user => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${user.id}</td>
-                <td>${user.fullName}</td>
-                <td>${user.email}</td>
-                <td>${user.date}</td>
-                <td>${user.videoTitle}</td>
+                <td>\${user.userId}</td>
+                <td>\${user.userName}</td>
+                <td>\${user.userEmail}</td>
+                <td>\${user.likeDate}</td>
+                <td>\${user.videoTitle}</td>
             `;
             tbody.appendChild(row);
         });
         
-        count.textContent = `Showing ${filteredData.length} users`;
+        count.textContent = `Showing \${filteredData.length} users`;
     }
 
     function loadSharedFriendsData(videoId = '') {
@@ -686,12 +773,9 @@
         const count = document.getElementById('sharedFriendsCount');
         
         // Filter data based on video selection
-        let filteredData = sampleShares;
+        let filteredData = sharesList;
         if (videoId) {
-            const selectedVideo = sampleVideos.find(v => v.id === videoId);
-            if (selectedVideo) {
-                filteredData = sampleShares.filter(s => s.videoTitle === selectedVideo.title);
-            }
+            filteredData = sharesList.filter(s => s.videoId === videoId);
         }
         
         // Clear existing data
@@ -701,16 +785,16 @@
         filteredData.forEach(share => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${share.senderName}</td>
-                <td>${share.senderEmail}</td>
-                <td>${share.receiverEmail}</td>
-                <td>${share.date}</td>
-                <td>${share.videoTitle}</td>
+                <td>\${share.senderName}</td>
+                <td>\${share.senderEmail}</td>
+                <td>\${share.receiverEmail}</td>
+                <td>\${share.shareDate}</td>
+                <td>\${share.videoTitle}</td>
             `;
             tbody.appendChild(row);
         });
         
-        count.textContent = `Showing ${filteredData.length} shares`;
+        count.textContent = `Showing \${filteredData.length} shares`;
     }
 
     // Show/hide tabs
