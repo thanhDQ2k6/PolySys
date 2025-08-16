@@ -395,11 +395,11 @@
     </div>
     <nav class="sidebar-nav">
         <ul>
-            <li><a href="#"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
-            <li><a href="#"><i class="fas fa-video"></i><span>Videos</span></a></li>
-            <li><a href="#"><i class="fas fa-users"></i><span>Users</span></a></li>
-            <li><a href="#"><i class="fas fa-chart-bar"></i><span>Analytics</span></a></li>
-            <li><a href="#"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+            <li><a href="${pageContext.request.contextPath}/video/list"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/video"><i class="fas fa-video"></i><span>Videos</span></a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/user"><i class="fas fa-users"></i><span>Users</span></a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/reports"><i class="fas fa-chart-bar"></i><span>Reports</span></a></li>
+            <li><a href="${pageContext.request.contextPath}/account/logout"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
         </ul>
     </nav>
 </div>
@@ -421,18 +421,15 @@
             <input type="hidden" id="videoId" name="videoId">
 
             <div class="form-group">
-                <label for="youtubeId" class="form-label">YouTube ID</label>
-                <input type="text" id="youtubeId" name="youtubeId" class="form-control" required>
+                <label for="youtubeUrl" class="form-label">YouTube URL</label>
+                <input type="text" id="youtubeUrl" name="youtubeUrl" class="form-control" placeholder="https://www.youtube.com/watch?v=VIDEO_ID" required onchange="extractVideoId()">
+                <input type="hidden" id="youtubeId" name="youtubeId">
+                <small class="form-text text-muted">Paste the full YouTube URL. The video ID will be extracted automatically.</small>
             </div>
 
             <div class="form-group">
                 <label for="videoTitle" class="form-label">Video Title</label>
                 <input type="text" id="videoTitle" name="videoTitle" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <label for="viewCount" class="form-label">View Count</label>
-                <input type="number" id="viewCount" name="viewCount" class="form-control" min="0" required>
             </div>
 
             <fieldset>
@@ -478,9 +475,8 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th>YouTube ID</th>
+                    <th>Video ID</th>
                     <th>Title</th>
-                    <th>Views</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -488,22 +484,20 @@
                 <tbody>
                 <c:forEach var="video" items="${videoList}">
                     <tr>
-                        <td>${video.youtubeId}</td>
-                        <td>${video.videoTitle}</td>
-                        <td>${video.viewCount}</td>
+                        <td>${video.id}</td>
+                        <td>${video.title}</td>
                         <td>
-                            <span class="badge ${video.status == 'active' ? 'badge-success' : 'badge-secondary'}">
-                                    ${video.status}
+                            <span class="badge ${video.active ? 'badge-success' : 'badge-secondary'}">
+                                    ${video.active ? 'Active' : 'Inactive'}
                             </span>
                         </td>
                         <td class="table-actions">
                             <button class="btn btn-primary" onclick="loadVideoForEdit(
                                     '${video.id}',
-                                    '${video.youtubeId}',
-                                    '${video.videoTitle}',
-                                    '${video.viewCount}',
-                                    '${video.status}',
-                                    '${video.description}'
+                                    '${video.title}',
+                                    '${video.active}',
+                                    '${video.description}',
+                                    '${video.link}'
                                     )">
                                 <i class="fas fa-edit"></i> Edit
                             </button>
@@ -543,15 +537,18 @@
         event.currentTarget.classList.add('active');
     }
 
-    // Load video data into form for editing - remains the same
-    function loadVideoForEdit(id, youtubeId, title, viewCount, status, description) {
+    // Load video data into form for editing
+    function loadVideoForEdit(id, title, active, description, link) {
         document.getElementById('videoId').value = id;
-        document.getElementById('youtubeId').value = youtubeId;
         document.getElementById('videoTitle').value = title;
-        document.getElementById('viewCount').value = viewCount;
         document.getElementById('description').value = description;
+        
+        // Extract video ID from YouTube URL or use the id directly
+        const youtubeUrl = link || `https://www.youtube.com/watch?v=${id}`;
+        document.getElementById('youtubeUrl').value = youtubeUrl;
+        document.getElementById('youtubeId').value = id;
 
-        if (status === 'active') {
+        if (active) {
             document.getElementById('statusActive').checked = true;
         } else {
             document.getElementById('statusInactive').checked = true;
@@ -560,10 +557,27 @@
         showTab('videoEdition');
     }
 
+    // Extract YouTube video ID from URL
+    function extractVideoId() {
+        const url = document.getElementById('youtubeUrl').value;
+        const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/;
+        const match = url.match(regex);
+        
+        if (match) {
+            const videoId = match[1];
+            document.getElementById('youtubeId').value = videoId;
+            console.log('Extracted video ID:', videoId);
+        } else {
+            document.getElementById('youtubeId').value = '';
+            console.log('Invalid YouTube URL');
+        }
+    }
+
     // Reset video form
     function resetVideoForm() {
         document.getElementById('videoForm').reset();
         document.getElementById('videoId').value = '';
+        document.getElementById('youtubeId').value = '';
         document.getElementById('statusActive').checked = true;
     }
 
@@ -578,16 +592,16 @@
 
         // Get form data
         const formData = {
+            youtubeUrl: document.getElementById('youtubeUrl').value,
             youtubeId: document.getElementById('youtubeId').value,
             videoTitle: document.getElementById('videoTitle').value,
-            viewCount: document.getElementById('viewCount').value,
             status: document.querySelector('input[name="status"]:checked').value,
             description: document.getElementById('description').value
         };
 
         // Validate required fields
-        if (!formData.youtubeId || !formData.videoTitle || formData.viewCount === '') {
-            alert('Please fill in all required fields');
+        if (!formData.youtubeUrl || !formData.youtubeId || !formData.videoTitle) {
+            alert('Please fill in all required fields and ensure valid YouTube URL');
             return;
         }
 
@@ -611,9 +625,9 @@
         // Get form data
         const formData = {
             id: videoId,
+            youtubeUrl: document.getElementById('youtubeUrl').value,
             youtubeId: document.getElementById('youtubeId').value,
             videoTitle: document.getElementById('videoTitle').value,
-            viewCount: document.getElementById('viewCount').value,
             status: document.querySelector('input[name="status"]:checked').value,
             description: document.getElementById('description').value
         };

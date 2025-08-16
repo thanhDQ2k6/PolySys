@@ -3,9 +3,12 @@ package servlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.FavoriteDAO;
 import dao.FavoriteDAOImpl;
+import dao.ShareDAO;
+import dao.ShareDAOImpl;
 import dao.VideoDAO;
 import dao.VideoDAOImpl;
 import entity.Favorite;
+import entity.Share;
 import entity.Video;
 import entity.User;
 import util.XJPA;
@@ -175,20 +178,56 @@ public class VideoServlet extends HttpServlet {
             }
         }
         if ("/api/share".equals(path)) {
+            // Get user from session
+            User user = (User) request.getSession().getAttribute("user");
+            if (user == null) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("{\"error\":\"Chưa đăng nhập\"}");
+                return;
+            }
+            
             // Lấy thông tin từ request
             String recipientEmail = request.getParameter("recipientEmail");
             String videoTitle = request.getParameter("videoTitle");
             String youtubeLink = request.getParameter("youtubeLink");
+            String videoId = request.getParameter("videoId");
+            
             // Kiểm tra đầu vào
             if (recipientEmail == null || recipientEmail.isEmpty() ||
                 videoTitle == null || videoTitle.isEmpty() ||
-                youtubeLink == null || youtubeLink.isEmpty()) {
+                youtubeLink == null || youtubeLink.isEmpty() ||
+                videoId == null || videoId.isEmpty()) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 response.getWriter().write("{\"error\":\"Thiếu thông tin chia sẻ\"}");
                 return;
             }
-            try {
+            
+            try (XJPA jpa = new XJPA()) {
+                EntityManager em = jpa.getEntityManager();
+                VideoDAO videoDAO = new VideoDAOImpl(em);
+                ShareDAO shareDAO = new ShareDAOImpl(em);
+                
+                // Get video entity
+                Optional<Video> videoOpt = videoDAO.findById(videoId);
+                if (!videoOpt.isPresent()) {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    response.getWriter().write("{\"error\":\"Video không tồn tại\"}");
+                    return;
+                }
+                
+                // Create share record
+                Share share = new Share();
+                share.setUser(user);
+                share.setVideo(videoOpt.get());
+                share.setEmails(recipientEmail);
+                share.setShareDate(java.time.LocalDate.now());
+                
+                // Save to database
+                shareDAO.create(share);
+                
+                // Send email
                 util.EmailUtil.constructAndSendShareEmail(recipientEmail, videoTitle, youtubeLink);
+                
                 response.setContentType("application/json");
                 response.getWriter().write("{\"success\":true}");
             } catch (Exception e) {

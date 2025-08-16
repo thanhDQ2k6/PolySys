@@ -395,11 +395,11 @@
     </div>
     <nav class="sidebar-nav">
         <ul>
-            <li><a href="#"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
-            <li><a href="#"><i class="fas fa-video"></i><span>Videos</span></a></li>
-            <li><a href="#"><i class="fas fa-users"></i><span>Users</span></a></li>
-            <li><a href="#"><i class="fas fa-chart-bar"></i><span>Analytics</span></a></li>
-            <li><a href="#"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+            <li><a href="${pageContext.request.contextPath}/video/list"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/video"><i class="fas fa-video"></i><span>Videos</span></a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/user"><i class="fas fa-users"></i><span>Users</span></a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/reports"><i class="fas fa-chart-bar"></i><span>Reports</span></a></li>
+            <li><a href="${pageContext.request.contextPath}/account/logout"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
         </ul>
     </nav>
 </div>
@@ -426,27 +426,25 @@
                 <thead>
                 <tr>
                     <th>Video Title</th>
-                    <th>Favorites Count</th>
-                    <th>Latest Day</th>
-                    <th>Oldest Day</th>
+                    <th>Total Favorites</th>
+                    <th>Latest Favorite Date</th>
+                    <th>Oldest Favorite Date</th>
                 </tr>
                 </thead>
-                <tbody>
-                <c:forEach var="favorite" items="${favoritesReport}">
+                <tbody id="favoritesTableBody">
+                    <!-- Data will be loaded dynamically -->
                     <tr>
-                        <td>${favorite.videoTitle}</td>
-                        <td>${favorite.favoritesCount}</td>
-                        <td>${favorite.latestDay}</td>
-                        <td>${favorite.oldestDay}</td>
+                        <td colspan="4" class="text-center">
+                            <i class="fas fa-spinner fa-spin"></i> Loading favorites data...
+                        </td>
                     </tr>
-                </c:forEach>
                 </tbody>
             </table>
         </div>
 
         <div class="pagination">
             <div class="pagination-info">
-                Showing ${favoritesReport.size()} of ${totalFavorites} records
+                <span id="favoritesCount">Loading...</span>
             </div>
             <div class="pagination-controls">
                 <button class="btn btn-outline" onclick="previousFavoritesPage()">
@@ -467,9 +465,7 @@
             <label for="videoSelect" class="form-label">Select Video:</label>
             <select id="videoSelect" class="form-control" onchange="filterFavoriteUsers()">
                 <option value="">All Videos</option>
-                <c:forEach var="video" items="${videos}">
-                    <option value="${video.id}">${video.title}</option>
-                </c:forEach>
+                <!-- Options will be loaded dynamically -->
             </select>
         </div>
 
@@ -480,25 +476,23 @@
                     <th>Username</th>
                     <th>Full Name</th>
                     <th>Email</th>
-                    <th>Favorite Day</th>
+                    <th>Favorite Date</th>
+                    <th>Video Title</th>
                 </tr>
                 </thead>
-                <tbody>
-                <c:forEach var="user" items="${favoriteUsers}">
+                <tbody id="favoriteUsersTableBody">
                     <tr>
-                        <td>${user.username}</td>
-                        <td>${user.fullName}</td>
-                        <td>${user.email}</td>
-                        <td>${user.favoriteDay}</td>
+                        <td colspan="5" class="text-center">
+                            <i class="fas fa-spinner fa-spin"></i> Loading users data...
+                        </td>
                     </tr>
-                </c:forEach>
                 </tbody>
             </table>
         </div>
 
         <div class="pagination">
             <div class="pagination-info">
-                Showing ${favoriteUsers.size()} of ${totalFavoriteUsers} users
+                <span id="favoriteUsersCount">Loading...</span>
             </div>
             <div class="pagination-controls">
                 <button class="btn btn-outline" onclick="previousFavoriteUsersPage()">
@@ -519,9 +513,7 @@
             <label for="sharedVideoSelect" class="form-label">Select Video:</label>
             <select id="sharedVideoSelect" class="form-control" onchange="filterSharedFriends()">
                 <option value="">All Videos</option>
-                <c:forEach var="video" items="${videos}">
-                    <option value="${video.id}">${video.title}</option>
-                </c:forEach>
+                <!-- Options will be loaded dynamically -->
             </select>
         </div>
 
@@ -532,25 +524,23 @@
                     <th>Sender Name</th>
                     <th>Sender Email</th>
                     <th>Receiver Email</th>
-                    <th>Sent Day</th>
+                    <th>Share Date</th>
+                    <th>Video Title</th>
                 </tr>
                 </thead>
-                <tbody>
-                <c:forEach var="share" items="${sharedFriends}">
+                <tbody id="sharedFriendsTableBody">
                     <tr>
-                        <td>${share.senderName}</td>
-                        <td>${share.senderEmail}</td>
-                        <td>${share.receiverEmail}</td>
-                        <td>${share.sentDay}</td>
+                        <td colspan="5" class="text-center">
+                            <i class="fas fa-spinner fa-spin"></i> Loading shares data...
+                        </td>
                     </tr>
-                </c:forEach>
                 </tbody>
             </table>
         </div>
 
         <div class="pagination">
             <div class="pagination-info">
-                Showing ${sharedFriends.size()} of ${totalSharedFriends} shares
+                <span id="sharedFriendsCount">Loading...</span>
             </div>
             <div class="pagination-controls">
                 <button class="btn btn-outline" onclick="previousSharedFriendsPage()">
@@ -565,6 +555,164 @@
 </main>
 
 <script>
+    // Sample data for demo purposes
+    const sampleVideos = [
+        { id: 'dQw4w9WgXcQ', title: 'Never Gonna Give You Up' },
+        { id: 'L_jWHffIx5E', title: 'Smells Like Teen Spirit' },
+        { id: 'fJ9rUzIMcZQ', title: 'Bohemian Rhapsody' },
+        { id: 'kffacxfA7G4', title: 'Baby One More Time' },
+        { id: 'hTWKbfoikeg', title: 'Somebody That I Used to Know' }
+    ];
+
+    const sampleFavorites = [
+        { videoTitle: 'Never Gonna Give You Up', count: 15, latest: '2024-01-15', oldest: '2023-12-01' },
+        { videoTitle: 'Smells Like Teen Spirit', count: 8, latest: '2024-01-10', oldest: '2023-11-15' },
+        { videoTitle: 'Bohemian Rhapsody', count: 12, latest: '2024-01-12', oldest: '2023-10-20' },
+        { videoTitle: 'Baby One More Time', count: 6, latest: '2024-01-08', oldest: '2023-12-10' },
+        { videoTitle: 'Somebody That I Used to Know', count: 9, latest: '2024-01-14', oldest: '2023-11-28' }
+    ];
+
+    const sampleFavoriteUsers = [
+        { username: 'john_doe', fullName: 'John Doe', email: 'john@example.com', date: '2024-01-15', videoTitle: 'Never Gonna Give You Up' },
+        { username: 'jane_smith', fullName: 'Jane Smith', email: 'jane@example.com', date: '2024-01-14', videoTitle: 'Bohemian Rhapsody' },
+        { username: 'mike_wilson', fullName: 'Mike Wilson', email: 'mike@example.com', date: '2024-01-13', videoTitle: 'Smells Like Teen Spirit' },
+        { username: 'sarah_johnson', fullName: 'Sarah Johnson', email: 'sarah@example.com', date: '2024-01-12', videoTitle: 'Never Gonna Give You Up' },
+        { username: 'david_brown', fullName: 'David Brown', email: 'david@example.com', date: '2024-01-11', videoTitle: 'Baby One More Time' }
+    ];
+
+    const sampleShares = [
+        { senderName: 'John Doe', senderEmail: 'john@example.com', receiverEmail: 'friend1@example.com', date: '2024-01-15', videoTitle: 'Never Gonna Give You Up' },
+        { senderName: 'Jane Smith', senderEmail: 'jane@example.com', receiverEmail: 'friend2@example.com', date: '2024-01-14', videoTitle: 'Bohemian Rhapsody' },
+        { senderName: 'Mike Wilson', senderEmail: 'mike@example.com', receiverEmail: 'friend3@example.com', date: '2024-01-13', videoTitle: 'Smells Like Teen Spirit' },
+        { senderName: 'Sarah Johnson', senderEmail: 'sarah@example.com', receiverEmail: 'friend4@example.com', date: '2024-01-12', videoTitle: 'Never Gonna Give You Up' },
+        { senderName: 'David Brown', senderEmail: 'david@example.com', receiverEmail: 'friend5@example.com', date: '2024-01-11', videoTitle: 'Baby One More Time' }
+    ];
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+        loadInitialData();
+    });
+
+    function loadInitialData() {
+        // Load video options for dropdowns
+        loadVideoOptions();
+        
+        // Load initial data for active tab
+        setTimeout(() => {
+            loadFavoritesData();
+            loadFavoriteUsersData();
+            loadSharedFriendsData();
+        }, 1000); // Simulate loading delay
+    }
+
+    function loadVideoOptions() {
+        const videoSelect = document.getElementById('videoSelect');
+        const sharedVideoSelect = document.getElementById('sharedVideoSelect');
+        
+        // Clear existing options except "All Videos"
+        videoSelect.innerHTML = '<option value="">All Videos</option>';
+        sharedVideoSelect.innerHTML = '<option value="">All Videos</option>';
+        
+        // Add video options
+        sampleVideos.forEach(video => {
+            const option1 = document.createElement('option');
+            option1.value = video.id;
+            option1.textContent = video.title;
+            videoSelect.appendChild(option1);
+            
+            const option2 = document.createElement('option');
+            option2.value = video.id;
+            option2.textContent = video.title;
+            sharedVideoSelect.appendChild(option2);
+        });
+    }
+
+    function loadFavoritesData() {
+        const tbody = document.getElementById('favoritesTableBody');
+        const count = document.getElementById('favoritesCount');
+        
+        // Clear loading message
+        tbody.innerHTML = '';
+        
+        // Add data rows
+        sampleFavorites.forEach(fav => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${fav.videoTitle}</td>
+                <td>${fav.count}</td>
+                <td>${fav.latest}</td>
+                <td>${fav.oldest}</td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+        count.textContent = `Showing ${sampleFavorites.length} records`;
+    }
+
+    function loadFavoriteUsersData(videoId = '') {
+        const tbody = document.getElementById('favoriteUsersTableBody');
+        const count = document.getElementById('favoriteUsersCount');
+        
+        // Filter data based on video selection
+        let filteredData = sampleFavoriteUsers;
+        if (videoId) {
+            const selectedVideo = sampleVideos.find(v => v.id === videoId);
+            if (selectedVideo) {
+                filteredData = sampleFavoriteUsers.filter(u => u.videoTitle === selectedVideo.title);
+            }
+        }
+        
+        // Clear existing data
+        tbody.innerHTML = '';
+        
+        // Add filtered data rows
+        filteredData.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.username}</td>
+                <td>${user.fullName}</td>
+                <td>${user.email}</td>
+                <td>${user.date}</td>
+                <td>${user.videoTitle}</td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+        count.textContent = `Showing ${filteredData.length} users`;
+    }
+
+    function loadSharedFriendsData(videoId = '') {
+        const tbody = document.getElementById('sharedFriendsTableBody');
+        const count = document.getElementById('sharedFriendsCount');
+        
+        // Filter data based on video selection
+        let filteredData = sampleShares;
+        if (videoId) {
+            const selectedVideo = sampleVideos.find(v => v.id === videoId);
+            if (selectedVideo) {
+                filteredData = sampleShares.filter(s => s.videoTitle === selectedVideo.title);
+            }
+        }
+        
+        // Clear existing data
+        tbody.innerHTML = '';
+        
+        // Add filtered data rows
+        filteredData.forEach(share => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${share.senderName}</td>
+                <td>${share.senderEmail}</td>
+                <td>${share.receiverEmail}</td>
+                <td>${share.date}</td>
+                <td>${share.videoTitle}</td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+        count.textContent = `Showing ${filteredData.length} shares`;
+    }
+
     // Show/hide tabs
     function showTab(tabName) {
         document.querySelectorAll('.section').forEach(section => {
@@ -581,15 +729,13 @@
     // Filter favorite users by video selection
     function filterFavoriteUsers() {
         const videoId = document.getElementById('videoSelect').value;
-        console.log('Filtering favorite users by video:', videoId);
-        // Here you would typically make an AJAX call to filter the results
+        loadFavoriteUsersData(videoId);
     }
 
     // Filter shared friends by video selection
     function filterSharedFriends() {
         const videoId = document.getElementById('sharedVideoSelect').value;
-        console.log('Filtering shared friends by video:', videoId);
-        // Here you would typically make an AJAX call to filter the results
+        loadSharedFriendsData(videoId);
     }
 
     // Pagination functions for Favorites
@@ -625,7 +771,7 @@
         // Implement pagination logic
     }
 
-    // Toggle sidebar - remains the same
+    // Toggle sidebar
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         sidebar.classList.toggle('collapsed');

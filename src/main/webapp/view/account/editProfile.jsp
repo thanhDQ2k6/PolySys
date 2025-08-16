@@ -68,6 +68,21 @@
             box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
         }
 
+        .form-check {
+            margin-bottom: 20px;
+        }
+
+        .form-check-input:checked {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+
+        .form-check-label {
+            font-weight: 600;
+            color: #34495e;
+            cursor: pointer;
+        }
+
         .btn-save {
             background: linear-gradient(135deg, #3498db, #8e44ad);
             border: none;
@@ -147,15 +162,49 @@
         </div>
 
         <div class="mb-4">
-            <label for="password" class="form-label">Password</label>
-            <input
-                    name="password"
-                    type="password"
-                    class="form-control"
-                    id="password"
-                    placeholder="Enter your password"
-                    required
-            >
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="changePassword" onchange="togglePasswordSection()">
+                <label class="form-check-label" for="changePassword">
+                    Change Password
+                </label>
+            </div>
+        </div>
+
+        <div id="passwordSection" style="display: none;">
+            <div class="mb-4">
+                <label for="currentPassword" class="form-label">Current Password</label>
+                <input
+                        name="currentPassword"
+                        type="password"
+                        class="form-control"
+                        id="currentPassword"
+                        placeholder="Enter your current password"
+                >
+            </div>
+
+            <div class="mb-4">
+                <label for="newPassword" class="form-label">New Password</label>
+                <input
+                        name="newPassword"
+                        type="password"
+                        class="form-control"
+                        id="newPassword"
+                        placeholder="Enter your new password"
+                        minlength="6"
+                >
+            </div>
+
+            <div class="mb-4">
+                <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                <input
+                        name="confirmPassword"
+                        type="password"
+                        class="form-control"
+                        id="confirmPassword"
+                        placeholder="Confirm your new password"
+                        minlength="6"
+                >
+            </div>
         </div>
 
         <button type="submit" class="btn btn-save">
@@ -171,7 +220,50 @@
 </div>
 
 <script>
+    function togglePasswordSection() {
+        const passwordSection = document.getElementById('passwordSection');
+        const changePasswordCheckbox = document.getElementById('changePassword');
+        const currentPassword = document.getElementById('currentPassword');
+        const newPassword = document.getElementById('newPassword');
+        const confirmPassword = document.getElementById('confirmPassword');
+        
+        if (changePasswordCheckbox.checked) {
+            passwordSection.style.display = 'block';
+            currentPassword.required = true;
+            newPassword.required = true;
+            confirmPassword.required = true;
+        } else {
+            passwordSection.style.display = 'none';
+            currentPassword.required = false;
+            newPassword.required = false;
+            confirmPassword.required = false;
+            // Clear password fields when hiding
+            currentPassword.value = '';
+            newPassword.value = '';
+            confirmPassword.value = '';
+        }
+    }
+
     document.getElementById('editProfileForm').addEventListener('submit', function (e) {
+        const changePasswordCheckbox = document.getElementById('changePassword');
+        
+        if (changePasswordCheckbox.checked) {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (newPassword !== confirmPassword) {
+                e.preventDefault();
+                alert('New password and confirmation password do not match!');
+                return false;
+            }
+            
+            if (newPassword.length < 6) {
+                e.preventDefault();
+                alert('New password must be at least 6 characters long!');
+                return false;
+            }
+        }
+        
         alert('Profile update request submitted!');
     });
 </script>
