@@ -669,7 +669,7 @@
         filteredData.forEach(user => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${user.username}</td>
+                <td>${user.id}</td>
                 <td>${user.fullName}</td>
                 <td>${user.email}</td>
                 <td>${user.date}</td>
