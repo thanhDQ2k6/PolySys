@@ -212,6 +212,15 @@
                     </a>
                 </li>
 
+                <!-- Admin Panel (only for admin users) -->
+                <c:if test="${sessionScope.user != null && sessionScope.user.admin}">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="${pageContext.request.contextPath}/admin/video">
+                            <i class="bi bi-gear-fill"></i>Admin Panel
+                        </a>
+                    </li>
+                </c:if>
+
                 <!-- My Account Dropdown -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-dark" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

@@ -395,11 +395,11 @@
     </div>
     <nav class="sidebar-nav">
         <ul>
-            <li><a href="#"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
+            <li><a href="${pageContext.request.contextPath}/video/list"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
             <li><a href="#"><i class="fas fa-video"></i><span>Videos</span></a></li>
             <li><a href="#"><i class="fas fa-users"></i><span>Users</span></a></li>
             <li><a href="#"><i class="fas fa-chart-bar"></i><span>Analytics</span></a></li>
-            <li><a href="#"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+            <li><a href="${pageContext.request.contextPath}/account/logout"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
         </ul>
     </nav>
 </div>
