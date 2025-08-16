@@ -19,8 +19,7 @@ import java.util.List;
 @WebServlet({
         "/admin/video",
         "/admin/user",
-        "/admin/like",
-        "/admin/share"
+        "/admin/reports"
 })
 public class AdminServlet extends HttpServlet {
 
@@ -45,6 +44,12 @@ public class AdminServlet extends HttpServlet {
                 request.setAttribute("error", "Error loading user data: " + e.getMessage());
                 request.getRequestDispatcher("/view/admin/userManagement.jsp").forward(request, response);
             }
+        } else if (uri.contains("/admin/video")) {
+            // Load video management page
+            request.getRequestDispatcher("/view/admin/videosManagement.jsp").forward(request, response);
+        } else if (uri.contains("/admin/reports")) {
+            // Load reports page
+            request.getRequestDispatcher("/view/admin/reports.jsp").forward(request, response);
         } else {
             // For other admin pages, redirect to basic page
             request.getRequestDispatcher("/view/page.jsp").forward(request, response);
