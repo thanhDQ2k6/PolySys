@@ -1,11 +1,7 @@
 package servlet;
 
-import dao.UserDAO;
-import dao.UserDAOImpl;
-import dao.VideoDAO;
-import dao.VideoDAOImpl;
-import entity.User;
-import entity.Video;
+import dao.*;
+import entity.*;
 import util.XJPA;
 
 import javax.persistence.EntityManager;
@@ -17,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet({
@@ -64,8 +61,40 @@ public class AdminServlet extends HttpServlet {
                 request.getRequestDispatcher("/view/admin/videosManagement.jsp").forward(request, response);
             }
         } else if (uri.contains("/admin/reports")) {
-            // Load reports page
-            request.getRequestDispatcher("/view/admin/reports.jsp").forward(request, response);
+            // Load reports page with data
+            try (XJPA tx = new XJPA()) {
+                EntityManager em = tx.getEntityManager();
+                VideoDAO videoDAO = new VideoDAOImpl(em);
+                FavoriteDAO favoriteDAO = new FavoriteDAOImpl(em);
+                ShareDAO shareDAO = new ShareDAOImpl(em);
+                UserDAO userDAO = new UserDAOImpl(em);
+                
+                // Load all videos for dropdown options
+                List<Video> videoList = videoDAO.findAll();
+                request.setAttribute("videoList", videoList);
+                
+                // Load all favorites for favorites report
+                List<Favorite> allFavorites = new ArrayList<>();
+                for (Video video : videoList) {
+                    List<Favorite> videoFavorites = favoriteDAO.findByVideoId(video.getId());
+                    allFavorites.addAll(videoFavorites);
+                }
+                request.setAttribute("favoritesList", allFavorites);
+                
+                // Load all shares for shared friends report  
+                List<Share> allShares = new ArrayList<>();
+                for (Video video : videoList) {
+                    List<Share> videoShares = shareDAO.findByVideoId(video.getId());
+                    allShares.addAll(videoShares);
+                }
+                request.setAttribute("sharesList", allShares);
+                
+                request.getRequestDispatcher("/view/admin/reports.jsp").forward(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+                request.setAttribute("error", "Error loading report data: " + e.getMessage());
+                request.getRequestDispatcher("/view/admin/reports.jsp").forward(request, response);
+            }
         } else {
             // For other admin pages, redirect to basic page
             request.getRequestDispatcher("/view/page.jsp").forward(request, response);
