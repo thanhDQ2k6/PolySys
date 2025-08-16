@@ -164,7 +164,8 @@
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: 'recipientEmail=' + encodeURIComponent(emailInput.value) +
                   '&videoTitle=' + encodeURIComponent(videoTitle) +
-                  '&youtubeLink=' + encodeURIComponent(youtubeLink)
+                  '&youtubeLink=' + encodeURIComponent(youtubeLink) +
+                  '&videoId=' + encodeURIComponent(videoId)
         });
         const result = await res.json();
         if (result.success) {
