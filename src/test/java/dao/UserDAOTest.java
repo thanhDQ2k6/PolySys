@@ -2,7 +2,7 @@ package dao;
 
 import entity.User;
 import org.testng.annotations.*;
-import utils.XJPA;
+import util.XJPA;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
