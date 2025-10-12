@@ -1,0 +1,80 @@
+name: CI (PR on main)
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3333:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: polysys
+        options: >-
+          --health-cmd="mysqladmin ping -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+          cache: maven
+
+      - name: Install MySQL client
+        run: sudo apt-get update && sudo apt-get install -y mysql-client
+
+      - name: Wait for MySQL to be ready
+        shell: bash
+        run: |
+          for i in {1..30}; do
+            if mysqladmin ping -h 127.0.0.1 -P 3333 -uroot -proot --silent; then
+              echo "MySQL is up!"
+              break
+            fi
+            echo "Waiting for MySQL... ($i)"
+            sleep 2
+          done
+
+      - name: Prepare database schema and seed data
+        shell: bash
+        run: |
+          mysql -h 127.0.0.1 -P 3333 -uroot -proot -e "CREATE DATABASE IF NOT EXISTS polysys DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+          # Import schema (path contains a space, keep quotes)
+          mysql -h 127.0.0.1 -P 3333 -uroot -proot polysys < "src/main/resources/Database Generator/db-boot.sql"
+          # Enable LOCAL INFILE
+          mysql -h 127.0.0.1 -P 3333 -uroot -proot -e "SET GLOBAL local_infile=1;"
+          # Load seed CSVs via LOCAL INFILE (client-side paths)
+          mysql --local-infile=1 -h 127.0.0.1 -P 3333 -uroot -proot polysys -e "LOAD DATA LOCAL INFILE 'src/main/resources/Database Generator/user.csv' INTO TABLE user FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS (Id, Password, FullName, Email, @admin) SET Admin = IF(@admin = 'true', 1, 0);"
+          mysql --local-infile=1 -h 127.0.0.1 -P 3333 -uroot -proot polysys -e "LOAD DATA LOCAL INFILE 'src/main/resources/Database Generator/video.csv' INTO TABLE video FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS (Id, Title, Poster, @desc, @active, Views, Link) SET \`Desc\` = @desc, Active = IF(@active = 'true', 1, 0);"
+          mysql --local-infile=1 -h 127.0.0.1 -P 3333 -uroot -proot polysys -e "LOAD DATA LOCAL INFILE 'src/main/resources/Database Generator/favorite.csv' INTO TABLE favorite FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;"
+          mysql --local-infile=1 -h 127.0.0.1 -P 3333 -uroot -proot polysys -e "LOAD DATA LOCAL INFILE 'src/main/resources/Database Generator/share.csv' INTO TABLE share FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;"
+
+      - name: Build (skip tests)
+        run: mvn -B -ntp -DskipTests=true clean package
+
+      - name: Run DAO tests only
+        run: mvn -B -ntp -Dtest=*DAOTest test
+
+      - name: Upload surefire reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: |
+            target/surefire-reports/**
+            TEST-RESULTS.md
+            Test Results - *.html
+          if-no-files-found: warn
