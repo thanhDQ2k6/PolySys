@@ -58,7 +58,7 @@ jobs:
           mysql -h 127.0.0.1 -P 3333 -uroot -proot -e "SET GLOBAL local_infile=1;"
           # Load seed CSVs via LOCAL INFILE (client-side paths)
           mysql --local-infile=1 -h 127.0.0.1 -P 3333 -uroot -proot polysys -e "LOAD DATA LOCAL INFILE 'src/main/resources/Database Generator/user.csv' INTO TABLE user FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS (Id, Password, FullName, Email, @admin) SET Admin = IF(@admin = 'true', 1, 0);"
-          mysql --local-infile=1 -h 127.0.0.1 -P 3333 -uroot -proot polysys -e "LOAD DATA LOCAL INFILE 'src/main/resources/Database Generator/video.csv' INTO TABLE video FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS (Id, Title, Poster, @desc, @active, Views, Link) SET `Desc` = @desc, Active = IF(@active = 'true', 1, 0);"
+          mysql --local-infile=1 -h 127.0.0.1 -P 3333 -uroot -proot polysys -e "LOAD DATA LOCAL INFILE 'src/main/resources/Database Generator/video.csv' INTO TABLE video FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS (Id, Title, Poster, @desc, @active, Views, Link) SET \`Desc\` = @desc, Active = IF(@active = 'true', 1, 0);"
           mysql --local-infile=1 -h 127.0.0.1 -P 3333 -uroot -proot polysys -e "LOAD DATA LOCAL INFILE 'src/main/resources/Database Generator/favorite.csv' INTO TABLE favorite FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;"
           mysql --local-infile=1 -h 127.0.0.1 -P 3333 -uroot -proot polysys -e "LOAD DATA LOCAL INFILE 'src/main/resources/Database Generator/share.csv' INTO TABLE share FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;"
 
