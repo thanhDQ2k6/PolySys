@@ -1,17 +1,17 @@
 package entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "user", schema = "polysys", uniqueConstraints = {
         @UniqueConstraint(name = "Email", columnNames = {"Email"})
 })
-@Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @Column(name = "Id", nullable = false, length = 20)
@@ -35,4 +35,12 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Share> shares;
+
+    public User(String fullname, String username, String email, String password) {
+        this.fullName = fullname;
+        this.id = username;
+        this.email = email;
+        this.password = password;
+        this.admin = false;
+    }
 }

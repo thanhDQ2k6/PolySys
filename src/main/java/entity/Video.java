@@ -1,5 +1,6 @@
 package entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,10 +16,10 @@ public class Video {
     @Column(name = "Id", nullable = false, length = 11)
     private String id;
 
-    @Column(name = "Title", nullable = false, length = 50)
+    @Column(name = "Title", nullable = false)
     private String title;
 
-    @Column(name = "Poster", nullable = false, length = 50)
+    @Column(name = "Poster", nullable = false)
     private String posterUrl;  // Thumbnail URL
 
     @Lob
@@ -31,13 +32,15 @@ public class Video {
     @Column(name = "Views", nullable = false)
     private Integer views = 0;
 
-    @Column(name = "Link", nullable = false, length = 255)
+    @Column(name = "Link", nullable = false)
     private String link;
 
     // Relationships
     @OneToMany(mappedBy = "video", cascade = CascadeType.ALL)
+    @JsonIgnore // Ngăn Jackson lặp vô hạn khi chuyển sang JSON
     private Set<Favorite> favorites;
 
     @OneToMany(mappedBy = "video", cascade = CascadeType.ALL)
+    @JsonIgnore // Ngăn Jackson lặp vô hạn khi chuyển sang JSON
     private Set<Share> shares;
 }

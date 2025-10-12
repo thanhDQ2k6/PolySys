@@ -4,7 +4,7 @@ import dao.UserDAO;
 import dao.UserDAOImpl;
 import entity.User;
 import filter.AuthFilter;
-import utils.XJPA;
+import util.XJPA;
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
@@ -12,7 +12,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -21,8 +20,14 @@ public class LoginServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        request.getRequestDispatcher("/view/login.jsp").forward(request, response);
+        String action = request.getParameter("action");
+        if ("logout".equals(action)) {
+            // Invalidate session and redirect to login page
+            request.getSession().invalidate();
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+        request.getRequestDispatcher("/view/account/login.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -41,22 +46,26 @@ public class LoginServlet extends HttpServlet {
                 if (u.isPresent()) {
                     if (u.get().getPassword().equals(password)) {
                         request.getSession().setAttribute("user", u.get());
-                        request.setAttribute("message", "Logged in successfully.");
 
                         String securedURI = (String) request.getSession().getAttribute(AuthFilter.SecuredURI);
                         if (securedURI != null) {
                             response.sendRedirect(securedURI);
-                            return;
+                            request.getSession().removeAttribute(AuthFilter.SecuredURI);
+                        } else {
+                            response.sendRedirect(request.getContextPath() + "/video/list");
                         }
                     } else {
-                        request.getSession().setAttribute("error", "Wrong Password");
+                        request.setAttribute("error", "Wrong Password");
+                        request.getRequestDispatcher("/view/account/login.jsp").forward(request, response);
                     }
                 } else {
-                    request.getSession().setAttribute("error", "Wrong Username");
+                    request.setAttribute("error", "Wrong Username");
+                    request.getRequestDispatcher("/view/account/login.jsp").forward(request, response);
                 }
-            } else request.getSession().setAttribute("error", "Please insert username and password");
-
-            request.getRequestDispatcher("/view/login.jsp").forward(request, response);
+            } else {
+                request.setAttribute("error", "Please insert username and password");
+                request.getRequestDispatcher("/view/account/login.jsp").forward(request, response);
+            }
         }
     }
 }

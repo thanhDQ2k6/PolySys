@@ -130,33 +130,54 @@
 </div>
 
 <script>
-    document.getElementById('shareForm').addEventListener('submit', function(e) {
-        e.preventDefault();
+    let videoTitle = '';
+    let youtubeLink = '';
+    // Lấy videoId từ URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoId = urlParams.get('id');
+    // Fetch video info
+    if (videoId) {
+        fetch(window.location.origin + '/PolySys_war/video/api/detail?id=' + videoId)
+            .then(res => res.json())
+            .then(video => {
+                videoTitle = video.title;
+                youtubeLink = video.link;
+            });
+    }
 
+    document.getElementById('shareForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        // Validate email input
         const emailInput = document.getElementById('friendEmail');
         const validationMessage = document.getElementById('emailValidation');
-
-        // Simple email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
         if (!emailRegex.test(emailInput.value)) {
             validationMessage.textContent = 'Please enter a valid email address';
             emailInput.classList.add('is-invalid');
             return;
         }
-
-        // Clear validation and simulate success
         validationMessage.textContent = '';
         emailInput.classList.remove('is-invalid');
-
-        // Show success feedback
-        emailInput.value = '';
-        const originalText = document.querySelector('.btn-send').innerHTML;
-        document.querySelector('.btn-send').innerHTML = '<i class="fas fa-check me-2"></i>Sent!';
-
-        setTimeout(() => {
-            document.querySelector('.btn-send').innerHTML = originalText;
-        }, 2000);
+        // Gửi email qua API
+        const res = await fetch(window.location.origin + '/PolySys_war/video/api/share', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'recipientEmail=' + encodeURIComponent(emailInput.value) +
+                  '&videoTitle=' + encodeURIComponent(videoTitle) +
+                  '&youtubeLink=' + encodeURIComponent(youtubeLink) +
+                  '&videoId=' + encodeURIComponent(videoId)
+        });
+        const result = await res.json();
+        if (result.success) {
+            emailInput.value = '';
+            const originalText = document.querySelector('.btn-send').innerHTML;
+            document.querySelector('.btn-send').innerHTML = '<i class="fas fa-check me-2"></i>Sent!';
+            setTimeout(() => {
+                document.querySelector('.btn-send').innerHTML = originalText;
+            }, 2000);
+        } else {
+            validationMessage.textContent = result.error || 'Send failed!';
+        }
     });
 
     // Add real-time validation

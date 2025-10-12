@@ -1,8 +1,6 @@
 package dao;
 
-import entity.User;
 import entity.Video;
-import utils.XJPA;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +25,7 @@ public class VideoDAOImpl implements VideoDAO {
     }
 
     @Override
-    public void create(Video video) throws EntityExistsException {
+    public boolean create(Video video) throws EntityExistsException {
         try {
             em.getTransaction().begin();
             if (video.getId() != null && em.find(Video.class, video.getId()) != null) {
@@ -35,9 +33,11 @@ public class VideoDAOImpl implements VideoDAO {
             }
             em.persist(video);
             em.getTransaction().commit();
+            return true;
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
+                return false;
             }
             throw e;
         }
@@ -121,6 +121,24 @@ public class VideoDAOImpl implements VideoDAO {
             return (Long) query.getSingleResult();
         } catch (Exception e) {
             return 0;
+        }
+    }
+
+    @Override
+    public void increaseView(String videoId) {
+        try {
+            em.getTransaction().begin();
+            Video video = em.find(Video.class, videoId);
+            if (video != null) {
+                video.setViews(video.getViews() + 1); // Tăng view
+                em.merge(video);
+            }
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
         }
     }
 }
