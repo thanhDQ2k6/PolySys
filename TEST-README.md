@@ -3,8 +3,8 @@
 ## Tổng quan (Overview)
 
 Bộ test suite này được thiết kế để kiểm thử toàn diện hệ thống PolySys, bao gồm:
-- **Backend DAO Tests**: Kiểm thử các lớp truy cập dữ liệu (UserDAO, VideoDAO)
-- **UI Tests**: Kiểm thử giao diện quản lý video của admin sử dụng Selenium
+- **Backend DAO Tests**: Kiểm thử các lớp truy cập dữ liệu (UserDAO, VideoDAO, FavoriteDAO, ShareDAO)
+- **UI Tests**: Kiểm thử giao diện người dùng sử dụng Selenium (Login, Video Browsing, Admin Management)
 
 ## Cấu trúc Test Cases
 
@@ -38,7 +38,45 @@ Kiểm thử tất cả các chức năng của VideoDAO sử dụng các kỹ t
 - ✅ Delete video (3 test cases): Xóa hợp lệ, không tồn tại, null ID
 - ✅ Custom methods (10 test cases): findByActiveTrue, findByTitleContaining (case-insensitive), countByActiveTrue, increaseView
 
-### 3. UI Test Cases (15 test cases)
+### 3. FavoriteDAO Test Cases (20 test cases)
+📄 File: `FavoriteDAO-TestCases.md`
+
+Kiểm thử tất cả các chức năng của FavoriteDAO:
+- ✅ Create favorite (5 test cases): Valid, null fields, duplicate
+- ✅ Read favorite (6 test cases): findByUserId, findByVideoId, findByUserAndVideo
+- ✅ Delete favorite (2 test cases): Valid delete, non-existent
+- ✅ Count operations (2 test cases): countByVideoId
+- ✅ Advanced scenarios (5 test cases): Multiple favorites, ordering, date handling
+
+### 4. ShareDAO Test Cases (23 test cases)
+📄 File: `ShareDAO-TestCases.md`
+
+Kiểm thử tất cả các chức năng của ShareDAO:
+- ✅ Create share (8 test cases): Valid, null fields, email length validation
+- ✅ Read share (5 test cases): findByUserId, findByVideoId, findByUserAndVideo
+- ✅ Delete share (2 test cases): Valid delete, non-existent
+- ✅ Count operations (2 test cases): countByVideoId
+- ✅ Advanced scenarios (6 test cases): Multiple shares, ordering, date handling, multiple emails
+
+### 5. Login UI Test Cases (10 test cases)
+📄 File: `LoginUI-TestCases.md`
+
+Kiểm thử giao diện đăng nhập:
+- ✅ Page load và form elements (2 test cases)
+- ✅ Authentication (5 test cases): Valid/invalid credentials, empty fields
+- ✅ Security (3 test cases): Password masking, session, logout
+
+### 6. Video Browsing UI Test Cases (15 test cases)
+📄 File: `VideoBrowsing-TestCases.md`
+
+Kiểm thử giao diện duyệt video:
+- ✅ Video display (3 test cases): List, detail, grid layout
+- ✅ User interactions (4 test cases): Search, pagination, favorite, share
+- ✅ Navigation (3 test cases): Menu, footer, links
+- ✅ Responsive design (2 test cases): Mobile, tablet layouts
+- ✅ Additional features (3 test cases): Sorting, filtering, statistics
+
+### 7. Video Management UI Test Cases (15 test cases)
 📄 Class: `src/test/java/ui/VideoManagementUITest.java`
 
 Kiểm thử giao diện quản lý video của admin:
@@ -103,14 +141,21 @@ mvn test -Dtest=UserDAOTest#testCreateValidUser
 
 ## Kết quả mong đợi
 
-### Backend Tests (90 test cases)
-- **Tỷ lệ pass**: 80-90 tests (88-100%)
-- **Tỷ lệ fail**: 0-10 tests
+### Backend Tests (133 test cases)
+- **UserDAO**: 40 tests
+- **VideoDAO**: 50 tests
+- **FavoriteDAO**: 20 tests
+- **ShareDAO**: 23 tests
+- **Tỷ lệ pass**: 115-125 tests (86-94%)
+- **Tỷ lệ fail**: 8-18 tests
 - **Lý do fail**: Tests kiểm tra constraint violations (id/email quá dài, NULL required fields, duplicate keys) - đây là expected failures
 
-### UI Tests (15 test cases)
-- **Tỷ lệ pass**: 12-15 tests (80-100%)
-- **Lý do skip/fail**: Server không chạy, timing issues, element locator changes
+### UI Tests (40 test cases)
+- **Login UI**: 10 tests
+- **Video Browsing UI**: 15 tests
+- **Video Management UI**: 15 tests
+- **Tỷ lệ pass**: 30-38 tests (75-95%)
+- **Lý do skip/fail**: Server không chạy, timing issues, element locator changes, features not implemented
 
 ## Kỹ thuật kiểm thử áp dụng
 
@@ -148,13 +193,14 @@ Kiểm tra tất cả các tổ hợp của các điều kiện:
 
 ## Cấu trúc thư mục
 
-```
 PolySys/
 ├── src/
 │   ├── main/
 │   │   ├── java/
 │   │   │   ├── dao/              # DAO interfaces và implementations
 │   │   │   ├── entity/           # Entity classes
+│   │   │   ├── servlet/          # Servlet controllers
+│   │   │   ├── filter/           # Authentication filters
 │   │   │   └── util/             # Utility classes (XJPA)
 │   │   └── resources/
 │   │       ├── META-INF/
@@ -162,20 +208,34 @@ PolySys/
 │   │       └── Database Generator/
 │   │           ├── db-boot.sql   # Database schema
 │   │           ├── user.csv      # Sample user data
-│   │           └── video.csv     # Sample video data
+│   │           ├── video.csv     # Sample video data
+│   │           ├── favorite.csv  # Sample favorite data
+│   │           └── share.csv     # Sample share data
 │   └── test/
 │       └── java/
 │           ├── dao/              # Backend DAO tests
 │           │   ├── UserDAOTest.java
-│           │   └── VideoDAOTest.java
+│           │   ├── VideoDAOTest.java
+│           │   ├── FavoriteDAOTest.java
+│           │   └── ShareDAOTest.java
 │           └── ui/               # UI tests
+│               ├── LoginUITest.java
+│               ├── VideoBrowsingUITest.java
 │               └── VideoManagementUITest.java
+├── testingDocuments/             # Test plan templates
+│   ├── KiemThuWebsiteQuanLyNhaHangTrucTuyen.docx
+│   ├── Template_TestCase_KiemThuWebsiteQuanLyNhaHangTrucTuyen.xlsx
+│   ├── Test_Plan_Template_KiemThuWebsiteQuanLyNhaHangTrucTuyen.xlsx
+│   └── Test_Type_KiemThuWebsiteQuanLyNhaHangTrucTuyen.docx
 ├── UserDAO-TestCases.md          # User test case documentation
 ├── VideoDAO-TestCases.md         # Video test case documentation
+├── FavoriteDAO-TestCases.md      # Favorite test case documentation
+├── ShareDAO-TestCases.md         # Share test case documentation
+├── LoginUI-TestCases.md          # Login UI test case documentation
+├── VideoBrowsing-TestCases.md    # Video browsing UI test case documentation
 ├── TEST-RESULTS.md               # Test execution results
 ├── TEST-README.md                # This file
 └── run-tests.sh                  # Test execution script
-```
 
 ## Xem kết quả test
 
