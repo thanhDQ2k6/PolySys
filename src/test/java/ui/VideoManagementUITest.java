@@ -1,6 +1,5 @@
 package ui;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -27,12 +26,12 @@ public class VideoManagementUITest {
     public void setupClass() {
         System.out.println("=== Starting Video Management UI Tests ===");
         System.out.println("Note: These tests require the application to be running at " + BASE_URL);
-        WebDriverManager.chromedriver().setup();
     }
 
     @BeforeMethod
     public void setup() {
         ChromeOptions options = new ChromeOptions();
+        options.setBinary("C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe"); // Sử dụng Brave
         options.addArguments("--headless"); // Run in headless mode for CI/CD
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
