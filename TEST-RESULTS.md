@@ -13,20 +13,26 @@ This document summarizes the test execution status for UserDAO and VideoDAO test
 ## Compilation Status
 ✅ **All test classes compiled successfully**
 - UserDAOTest.java - 40 test methods
-- VideoDAOTest.java - 50 test methods  
+- VideoDAOTest.java - 50 test methods
+- FavoriteDAOTest.java - 20 test methods
+- ShareDAOTest.java - 23 test methods
+- LoginUITest.java - 10 UI test methods
+- VideoBrowsingUITest.java - 15 UI test methods
 - VideoManagementUITest.java - 15 UI test methods
 
-**Total Test Methods**: 105 tests
+**Total Test Methods**: 173 tests (133 backend + 40 UI)
 
 ## Test Execution Prerequisites
 
-### For Backend Tests (UserDAO & VideoDAO):
+### For Backend Tests (All DAO Tests):
 1. MySQL server must be running
 2. Database `polysys` must exist
 3. Tables must be created using `/src/main/resources/Database Generator/db-boot.sql`
 4. Sample data must be loaded from CSV files:
-   - user.csv (5 users: admin01, admin02, user01, user02, user03)
+   - user.csv (5 users: admin, user01-user05)
    - video.csv (21 videos: V01-V21)
+   - favorite.csv (sample favorites)
+   - share.csv (sample shares)
 5. Database credentials in persistence.xml must match (user: root, password: 12345)
 
 ### For UI Tests (VideoManagementUITest):
