@@ -89,8 +89,7 @@ jobs:
           name: surefire-reports
           path: |
             target/surefire-reports/**
-            TEST-RESULTS.md
-            TEST-PLAN.md
-            Test Results - *.html
-            *-TestCases.md
+            TestDocuments/TestCases.md
+            TestDocuments/TestPlan.md
+            TestDocuments/*-TestCases.md
           if-no-files-found: warn

@@ -1,12 +1,12 @@
 # VideoDAO Test Cases
 
-## Test Case Overview
-This document contains comprehensive test cases for the VideoDAO implementation using black-box testing techniques including:
-- Equivalence Partitioning (EP)
-- Boundary Value Analysis (BVA)
-- Decision Table Testing (DT)
+## Tổng quan Test Cases
+Tài liệu này chứa các test cases toàn diện cho việc triển khai VideoDAO sử dụng các kỹ thuật kiểm thử hộp đen bao gồm:
+- Phân vùng Tương đương (Equivalence Partitioning - EP)
+- Phân tích Giá trị Biên (Boundary Value Analysis - BVA)
+- Kiểm thử Bảng Quyết định (Decision Table Testing - DT)
 
-## Database Schema Reference
+## Tham chiếu Database Schema
 ```sql
 CREATE TABLE video (
     Id     char(11)         NOT NULL PRIMARY KEY,
