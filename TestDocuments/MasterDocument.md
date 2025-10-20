@@ -224,7 +224,7 @@ Kiểm tra tất cả các tổ hợp của các điều kiện:
 | **Kết quả** | **Success** | **Fail** | **Fail** | **Fail** |
 
 ## Cấu trúc thư mục
-
+```
 PolySys/
 ├── src/
 │   ├── main/
@@ -267,7 +267,7 @@ PolySys/
 │   ├── VideoBrowsing-TestCases.md # Video browsing UI test case documentation
 │   └── run-tests.sh              # Test execution script
 └── pom.xml
-
+```
 ## Xem kết quả test
 
 ### Terminal output
