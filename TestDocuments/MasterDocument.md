@@ -1,15 +1,31 @@
-# PolySys Test Suite Documentation
+# PolySys Test Suite Documentation - Master Document
 
 ## Tổng quan (Overview)
 
 Bộ test suite này được thiết kế để kiểm thử toàn diện hệ thống PolySys, bao gồm:
-- **Backend DAO Tests**: Kiểm thử các lớp truy cập dữ liệu (UserDAO, VideoDAO)
-- **UI Tests**: Kiểm thử giao diện quản lý video của admin sử dụng Selenium
+- **Backend DAO Tests**: Kiểm thử các lớp truy cập dữ liệu (UserDAO, VideoDAO, FavoriteDAO, ShareDAO)
+- **UI Tests**: Kiểm thử giao diện người dùng sử dụng Selenium (Login, Video Browsing, Admin Management)
+
+## Tài liệu trong TestDocuments Folder
+
+Thư mục **TestDocuments** chứa tất cả tài liệu kiểm thử quan trọng:
+
+1. **MasterDocument.md** (this file) - Tài liệu tổng quan và hướng dẫn cho toàn bộ test suite
+2. **TestTypes.md** - Danh sách đầy đủ các loại kiểm thử được sử dụng trong dự án
+3. **TestPlan.md** - Kế hoạch kiểm thử chi tiết cho dự án
+4. **TestCases.md** - Báo cáo kết quả và chi tiết cho tất cả test cases
+5. **UserDAO-TestCases.md** - Test cases cho UserDAO
+6. **VideoDAO-TestCases.md** - Test cases cho VideoDAO
+7. **FavoriteDAO-TestCases.md** - Test cases cho FavoriteDAO
+8. **ShareDAO-TestCases.md** - Test cases cho ShareDAO
+9. **LoginUI-TestCases.md** - Test cases cho Login UI
+10. **VideoBrowsing-TestCases.md** - Test cases cho Video Browsing UI
+11. **run-tests.sh** - Script tự động chạy tests
 
 ## Cấu trúc Test Cases
 
 ### 1. UserDAO Test Cases (40 test cases)
-📄 File: `UserDAO-TestCases.md`
+📄 File: `TestDocuments/UserDAO-TestCases.md`
 
 Kiểm thử tất cả các chức năng của UserDAO sử dụng các kỹ thuật kiểm thử hộp đen:
 - **Phân vùng tương đương (Equivalence Partitioning)**: Dữ liệu hợp lệ/không hợp lệ
@@ -24,7 +40,7 @@ Kiểm thử tất cả các chức năng của UserDAO sử dụng các kỹ th
 - ✅ Custom methods (4 test cases): Các phương thức đặc biệt của UserDAO
 
 ### 2. VideoDAO Test Cases (50 test cases)
-📄 File: `VideoDAO-TestCases.md`
+📄 File: `TestDocuments/VideoDAO-TestCases.md`
 
 Kiểm thử tất cả các chức năng của VideoDAO sử dụng các kỹ thuật kiểm thử hộp đen:
 - **Phân vùng tương đương**: Dữ liệu hợp lệ/không hợp lệ cho tất cả các trường
@@ -38,7 +54,45 @@ Kiểm thử tất cả các chức năng của VideoDAO sử dụng các kỹ t
 - ✅ Delete video (3 test cases): Xóa hợp lệ, không tồn tại, null ID
 - ✅ Custom methods (10 test cases): findByActiveTrue, findByTitleContaining (case-insensitive), countByActiveTrue, increaseView
 
-### 3. UI Test Cases (15 test cases)
+### 3. FavoriteDAO Test Cases (20 test cases)
+📄 File: `TestDocuments/FavoriteDAO-TestCases.md`
+
+Kiểm thử tất cả các chức năng của FavoriteDAO:
+- ✅ Create favorite (5 test cases): Valid, null fields, duplicate
+- ✅ Read favorite (6 test cases): findByUserId, findByVideoId, findByUserAndVideo
+- ✅ Delete favorite (2 test cases): Valid delete, non-existent
+- ✅ Count operations (2 test cases): countByVideoId
+- ✅ Advanced scenarios (5 test cases): Multiple favorites, ordering, date handling
+
+### 4. ShareDAO Test Cases (23 test cases)
+📄 File: `TestDocuments/ShareDAO-TestCases.md`
+
+Kiểm thử tất cả các chức năng của ShareDAO:
+- ✅ Create share (8 test cases): Valid, null fields, email length validation
+- ✅ Read share (5 test cases): findByUserId, findByVideoId, findByUserAndVideo
+- ✅ Delete share (2 test cases): Valid delete, non-existent
+- ✅ Count operations (2 test cases): countByVideoId
+- ✅ Advanced scenarios (6 test cases): Multiple shares, ordering, date handling, multiple emails
+
+### 5. Login UI Test Cases (10 test cases)
+📄 File: `TestDocuments/LoginUI-TestCases.md`
+
+Kiểm thử giao diện đăng nhập:
+- ✅ Page load và form elements (2 test cases)
+- ✅ Authentication (5 test cases): Valid/invalid credentials, empty fields
+- ✅ Security (3 test cases): Password masking, session, logout
+
+### 6. Video Browsing UI Test Cases (15 test cases)
+📄 File: `TestDocuments/VideoBrowsing-TestCases.md`
+
+Kiểm thử giao diện duyệt video:
+- ✅ Video display (3 test cases): List, detail, grid layout
+- ✅ User interactions (4 test cases): Search, pagination, favorite, share
+- ✅ Navigation (3 test cases): Menu, footer, links
+- ✅ Responsive design (2 test cases): Mobile, tablet layouts
+- ✅ Additional features (3 test cases): Sorting, filtering, statistics
+
+### 7. Video Management UI Test Cases (15 test cases)
 📄 Class: `src/test/java/ui/VideoManagementUITest.java`
 
 Kiểm thử giao diện quản lý video của admin:
@@ -54,19 +108,31 @@ Kiểm thử giao diện quản lý video của admin:
 
 ```bash
 # Chạy tất cả tests (backend + UI)
-./run-tests.sh
+./TestDocuments/run-tests.sh
 
 # Chỉ chạy backend tests
-./run-tests.sh backend
+./TestDocuments/run-tests.sh backend
 
 # Chỉ chạy UI tests (cần server đang chạy)
-./run-tests.sh ui
+./TestDocuments/run-tests.sh ui
 
 # Chỉ chạy UserDAO tests
-./run-tests.sh user
+./TestDocuments/run-tests.sh user
 
 # Chỉ chạy VideoDAO tests
-./run-tests.sh video
+./TestDocuments/run-tests.sh video
+
+# Chỉ chạy FavoriteDAO tests
+./TestDocuments/run-tests.sh favorite
+
+# Chỉ chạy ShareDAO tests
+./TestDocuments/run-tests.sh share
+
+# Chỉ chạy Login UI tests
+./TestDocuments/run-tests.sh login
+
+# Chỉ chạy Video Browsing UI tests
+./TestDocuments/run-tests.sh browse
 ```
 
 ### Phương pháp 2: Chạy thủ công với Maven
@@ -81,6 +147,10 @@ mvn test
 # 3. Chạy một test class cụ thể
 mvn test -Dtest=UserDAOTest
 mvn test -Dtest=VideoDAOTest
+mvn test -Dtest=FavoriteDAOTest
+mvn test -Dtest=ShareDAOTest
+mvn test -Dtest=LoginUITest
+mvn test -Dtest=VideoBrowsingUITest
 mvn test -Dtest=VideoManagementUITest
 
 # 4. Chạy một test method cụ thể
@@ -103,14 +173,21 @@ mvn test -Dtest=UserDAOTest#testCreateValidUser
 
 ## Kết quả mong đợi
 
-### Backend Tests (90 test cases)
-- **Tỷ lệ pass**: 80-90 tests (88-100%)
-- **Tỷ lệ fail**: 0-10 tests
+### Backend Tests (133 test cases)
+- **UserDAO**: 40 tests
+- **VideoDAO**: 50 tests
+- **FavoriteDAO**: 20 tests
+- **ShareDAO**: 23 tests
+- **Tỷ lệ pass**: 115-125 tests (86-94%)
+- **Tỷ lệ fail**: 8-18 tests
 - **Lý do fail**: Tests kiểm tra constraint violations (id/email quá dài, NULL required fields, duplicate keys) - đây là expected failures
 
-### UI Tests (15 test cases)
-- **Tỷ lệ pass**: 12-15 tests (80-100%)
-- **Lý do skip/fail**: Server không chạy, timing issues, element locator changes
+### UI Tests (40 test cases)
+- **Login UI**: 10 tests
+- **Video Browsing UI**: 15 tests
+- **Video Management UI**: 15 tests
+- **Tỷ lệ pass**: 30-38 tests (75-95%)
+- **Lý do skip/fail**: Server không chạy, timing issues, element locator changes, features not implemented
 
 ## Kỹ thuật kiểm thử áp dụng
 
@@ -147,7 +224,6 @@ Kiểm tra tất cả các tổ hợp của các điều kiện:
 | **Kết quả** | **Success** | **Fail** | **Fail** | **Fail** |
 
 ## Cấu trúc thư mục
-
 ```
 PolySys/
 ├── src/
@@ -155,6 +231,8 @@ PolySys/
 │   │   ├── java/
 │   │   │   ├── dao/              # DAO interfaces và implementations
 │   │   │   ├── entity/           # Entity classes
+│   │   │   ├── servlet/          # Servlet controllers
+│   │   │   ├── filter/           # Authentication filters
 │   │   │   └── util/             # Utility classes (XJPA)
 │   │   └── resources/
 │   │       ├── META-INF/
@@ -162,21 +240,34 @@ PolySys/
 │   │       └── Database Generator/
 │   │           ├── db-boot.sql   # Database schema
 │   │           ├── user.csv      # Sample user data
-│   │           └── video.csv     # Sample video data
+│   │           ├── video.csv     # Sample video data
+│   │           ├── favorite.csv  # Sample favorite data
+│   │           └── share.csv     # Sample share data
 │   └── test/
 │       └── java/
 │           ├── dao/              # Backend DAO tests
 │           │   ├── UserDAOTest.java
-│           │   └── VideoDAOTest.java
+│           │   ├── VideoDAOTest.java
+│           │   ├── FavoriteDAOTest.java
+│           │   └── ShareDAOTest.java
 │           └── ui/               # UI tests
+│               ├── LoginUITest.java
+│               ├── VideoBrowsingUITest.java
 │               └── VideoManagementUITest.java
-├── UserDAO-TestCases.md          # User test case documentation
-├── VideoDAO-TestCases.md         # Video test case documentation
-├── TEST-RESULTS.md               # Test execution results
-├── TEST-README.md                # This file
-└── run-tests.sh                  # Test execution script
+├── TestDocuments/                # All test documentation
+│   ├── MasterDocument.md         # This file - Master test documentation
+│   ├── TestTypes.md              # List of all test types used
+│   ├── TestPlan.md               # Detailed test plan
+│   ├── TestCases.md              # Test results and case details
+│   ├── UserDAO-TestCases.md      # User DAO test case documentation
+│   ├── VideoDAO-TestCases.md     # Video DAO test case documentation
+│   ├── FavoriteDAO-TestCases.md  # Favorite DAO test case documentation
+│   ├── ShareDAO-TestCases.md     # Share DAO test case documentation
+│   ├── LoginUI-TestCases.md      # Login UI test case documentation
+│   ├── VideoBrowsing-TestCases.md # Video browsing UI test case documentation
+│   └── run-tests.sh              # Test execution script
+└── pom.xml
 ```
-
 ## Xem kết quả test
 
 ### Terminal output
@@ -189,9 +280,9 @@ Chi tiết đầy đủ trong thư mục `target/surefire-reports/`:
 - Text reports: `target/surefire-reports/*.txt`
 
 ### Markdown Documentation
-- `UserDAO-TestCases.md`: Bảng test cases cho UserDAO với cột "Kết quả thực tế"
-- `VideoDAO-TestCases.md`: Bảng test cases cho VideoDAO với cột "Kết quả thực tế"
-- `TEST-RESULTS.md`: Tổng hợp kết quả và phân tích
+- `TestDocuments/UserDAO-TestCases.md`: Bảng test cases cho UserDAO với cột "Kết quả thực tế"
+- `TestDocuments/VideoDAO-TestCases.md`: Bảng test cases cho VideoDAO với cột "Kết quả thực tế"
+- `TestDocuments/TestCases.md`: Tổng hợp kết quả và phân tích
 
 ## Ghi chú quan trọng
 

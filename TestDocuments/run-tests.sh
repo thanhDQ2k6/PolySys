@@ -141,13 +141,27 @@ if [ "$1" == "backend" ]; then
 elif [ "$1" == "ui" ]; then
     print_info "Running UI tests only..."
     print_info "Note: Application server must be running at http://localhost:8080/PolySys"
-    mvn test -Dtest=VideoManagementUITest
+    mvn test -Dtest=*UITest
 elif [ "$1" == "user" ]; then
     print_info "Running UserDAO tests only..."
     mvn test -Dtest=UserDAOTest
 elif [ "$1" == "video" ]; then
     print_info "Running VideoDAO tests only..."
     mvn test -Dtest=VideoDAOTest
+elif [ "$1" == "favorite" ]; then
+    print_info "Running FavoriteDAO tests only..."
+    mvn test -Dtest=FavoriteDAOTest
+elif [ "$1" == "share" ]; then
+    print_info "Running ShareDAO tests only..."
+    mvn test -Dtest=ShareDAOTest
+elif [ "$1" == "login" ]; then
+    print_info "Running Login UI tests only..."
+    print_info "Note: Application server must be running"
+    mvn test -Dtest=LoginUITest
+elif [ "$1" == "browse" ]; then
+    print_info "Running Video Browsing UI tests only..."
+    print_info "Note: Application server must be running"
+    mvn test -Dtest=VideoBrowsingUITest
 else
     print_info "Running all tests..."
     print_info "Note: UI tests will be skipped if server is not running"
@@ -162,3 +176,14 @@ echo "=========================================="
 echo ""
 print_info "Check target/surefire-reports/ for detailed test reports"
 print_info "Test results are also available in TEST-RESULTS.md"
+echo ""
+print_info "Available test options:"
+echo "  ./run-tests.sh          - Run all tests"
+echo "  ./run-tests.sh backend  - Run all backend DAO tests"
+echo "  ./run-tests.sh ui       - Run all UI tests"
+echo "  ./run-tests.sh user     - Run UserDAO tests"
+echo "  ./run-tests.sh video    - Run VideoDAO tests"
+echo "  ./run-tests.sh favorite - Run FavoriteDAO tests"
+echo "  ./run-tests.sh share    - Run ShareDAO tests"
+echo "  ./run-tests.sh login    - Run Login UI tests"
+echo "  ./run-tests.sh browse   - Run Video Browsing UI tests"
