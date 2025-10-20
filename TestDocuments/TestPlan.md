@@ -217,14 +217,16 @@ mvn test -Dtest=*UITest
 ## 6. Test Deliverables
 
 ### 6.1 Test Documentation
-- ✅ TEST-README.md - Overall test documentation
+- ✅ MasterDocument.md - Master test documentation (overview and instructions)
+- ✅ TestTypes.md - Complete list of all test types used
+- ✅ TestPlan.md - Detailed test plan (this document)
+- ✅ TestCases.md - Test execution results and analysis
 - ✅ UserDAO-TestCases.md - User DAO test cases
 - ✅ VideoDAO-TestCases.md - Video DAO test cases
 - ✅ FavoriteDAO-TestCases.md - Favorite DAO test cases
 - ✅ ShareDAO-TestCases.md - Share DAO test cases
 - ✅ LoginUI-TestCases.md - Login UI test cases
 - ✅ VideoBrowsing-TestCases.md - Video browsing UI test cases
-- ✅ TEST-RESULTS.md - Test execution results
 
 ### 6.2 Test Code
 - ✅ src/test/java/dao/UserDAOTest.java
