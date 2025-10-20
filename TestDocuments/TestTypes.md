@@ -1,301 +1,301 @@
-# Test Types Used in PolySys Project
+# Các loại kiểm thử được sử dụng trong dự án PolySys
 
-## Overview
-This document provides a comprehensive list of all test types and testing techniques applied in the PolySys video management system testing process.
+## Tổng quan
+Tài liệu này cung cấp danh sách đầy đủ tất cả các loại kiểm thử và kỹ thuật kiểm thử được áp dụng trong quy trình kiểm thử hệ thống quản lý video PolySys.
 
-## Test Levels
+## Các cấp độ kiểm thử
 
-### 1. Unit Testing
-**Description**: Testing individual components or methods in isolation.
+### 1. Kiểm thử đơn vị (Unit Testing)
+**Mô tả**: Kiểm thử các thành phần hoặc phương thức riêng lẻ một cách độc lập.
 
-**Coverage**:
-- DAO methods (Create, Read, Update, Delete)
-- Business logic validation
-- Data access operations
+**Phạm vi**:
+- Các phương thức DAO (Create, Read, Update, Delete)
+- Xác thực logic nghiệp vụ
+- Các thao tác truy cập dữ liệu
 
-**Tools Used**:
+**Công cụ sử dụng**:
 - TestNG 7.8.0
 - JUnit 5.10.2
 
-**Test Count**: 133 backend unit tests
+**Số lượng test**: 133 unit tests backend
 
 ---
 
-### 2. Integration Testing
-**Description**: Testing the interaction between components and external systems.
+### 2. Kiểm thử tích hợp (Integration Testing)
+**Mô tả**: Kiểm thử sự tương tác giữa các thành phần và hệ thống bên ngoài.
 
-**Coverage**:
-- Database integration (MySQL + JPA/Hibernate)
-- Entity relationships (User-Favorite, User-Share, Video-Favorite, Video-Share)
-- Transaction management
-- Persistence operations
+**Phạm vi**:
+- Tích hợp cơ sở dữ liệu (MySQL + JPA/Hibernate)
+- Quan hệ giữa các thực thể (User-Favorite, User-Share, Video-Favorite, Video-Share)
+- Quản lý giao dịch
+- Các thao tác lưu trữ
 
-**Tools Used**:
-- TestNG with JPA/Hibernate
+**Công cụ sử dụng**:
+- TestNG với JPA/Hibernate
 - MySQL 8.0
 
-**Test Count**: Included in the 133 backend tests
+**Số lượng test**: Bao gồm trong 133 tests backend
 
 ---
 
-### 3. User Interface (UI) Testing
-**Description**: Testing the user interface and end-to-end user workflows.
+### 3. Kiểm thử giao diện người dùng (UI Testing)
+**Mô tả**: Kiểm thử giao diện người dùng và quy trình làm việc end-to-end.
 
-**Coverage**:
-- Login functionality
-- Video browsing and search
-- Admin video management
-- Form validation
-- Navigation and interactions
+**Phạm vi**:
+- Chức năng đăng nhập
+- Duyệt và tìm kiếm video
+- Quản lý video của admin
+- Xác thực form
+- Điều hướng và tương tác
 
-**Tools Used**:
+**Công cụ sử dụng**:
 - Selenium WebDriver 4.36.0
 - TestNG
 - ChromeDriver
 
-**Test Count**: 40 UI tests
+**Số lượng test**: 40 UI tests
 
 ---
 
-## Testing Techniques
+## Các kỹ thuật kiểm thử
 
-### 1. Black-Box Testing
-**Description**: Testing based on requirements without knowledge of internal implementation.
+### 1. Kiểm thử hộp đen (Black-Box Testing)
+**Mô tả**: Kiểm thử dựa trên yêu cầu mà không cần biết về cài đặt nội bộ.
 
-**Applied to**:
-- All DAO operations
-- UI workflows
-- Business logic validation
+**Áp dụng cho**:
+- Tất cả các thao tác DAO
+- Quy trình làm việc UI
+- Xác thực logic nghiệp vụ
 
-**Techniques Used**:
-- Equivalence Partitioning
-- Boundary Value Analysis
-- Decision Table Testing
-
----
-
-### 2. Equivalence Partitioning (EP)
-**Description**: Dividing input data into valid and invalid partitions.
-
-**Examples**:
-- **Valid Partition**: Correct data types, within constraints, non-empty
-- **Invalid Partition**: NULL values, empty strings, out of range, duplicates
-
-**Applied to**:
-- User fields: id, password, fullName, email, admin
-- Video fields: id, title, posterUrl, description, active, views, link
-- Favorite fields: user, video, likeDate
-- Share fields: user, video, emails, shareDate
+**Kỹ thuật sử dụng**:
+- Phân vùng tương đương
+- Phân tích giá trị biên
+- Kiểm thử bảng quyết định
 
 ---
 
-### 3. Boundary Value Analysis (BVA)
-**Description**: Testing at the boundaries of input domains.
+### 2. Phân vùng tương đương (Equivalence Partitioning - EP)
+**Mô tả**: Chia dữ liệu đầu vào thành các phân vùng hợp lệ và không hợp lệ.
 
-**Boundary Examples**:
-- **User Entity**:
-  - id: 0, 1, 20, 21 characters (max: 20)
-  - password: 0, 1, 50, 51 characters (max: 50)
-  - fullName: 0, 1, 50, 51 characters (max: 50)
-  - email: 0, 1, 50, 51 characters (max: 50)
+**Ví dụ**:
+- **Phân vùng hợp lệ**: Kiểu dữ liệu đúng, trong phạm vi ràng buộc, không rỗng
+- **Phân vùng không hợp lệ**: Giá trị NULL, chuỗi rỗng, ngoài phạm vi, trùng lặp
 
-- **Video Entity**:
-  - id: 0, 1, 11, 12 characters (fixed: 11)
-  - title: 0, 1, 255, 256 characters (max: 255)
-  - posterUrl: 0, 1, 255, 256 characters (max: 255)
-  - link: 0, 1, 255, 256 characters (max: 255)
-  - description: LONGTEXT (tested with 10000+ characters)
-
-**Applied to**: All constrained fields in all entities
+**Áp dụng cho**:
+- Các trường User: id, password, fullName, email, admin
+- Các trường Video: id, title, posterUrl, description, active, views, link
+- Các trường Favorite: user, video, likeDate
+- Các trường Share: user, video, emails, shareDate
 
 ---
 
-### 4. Decision Table Testing (DT)
-**Description**: Testing all combinations of conditions and their outcomes.
+### 3. Phân tích giá trị biên (Boundary Value Analysis - BVA)
+**Mô tả**: Kiểm thử tại các ranh giới của miền đầu vào.
 
-**Example for User Creation**:
-| Condition | Test 1 | Test 2 | Test 3 | Test 4 |
+**Ví dụ về giá trị biên**:
+- **Thực thể User**:
+  - id: 0, 1, 20, 21 ký tự (max: 20)
+  - password: 0, 1, 50, 51 ký tự (max: 50)
+  - fullName: 0, 1, 50, 51 ký tự (max: 50)
+  - email: 0, 1, 50, 51 ký tự (max: 50)
+
+- **Thực thể Video**:
+  - id: 0, 1, 11, 12 ký tự (cố định: 11)
+  - title: 0, 1, 255, 256 ký tự (max: 255)
+  - posterUrl: 0, 1, 255, 256 ký tự (max: 255)
+  - link: 0, 1, 255, 256 ký tự (max: 255)
+  - description: LONGTEXT (kiểm thử với 10000+ ký tự)
+
+**Áp dụng cho**: Tất cả các trường có ràng buộc trong tất cả các thực thể
+
+---
+
+### 4. Kiểm thử bảng quyết định (Decision Table Testing - DT)
+**Mô tả**: Kiểm thử tất cả các tổ hợp của các điều kiện và kết quả của chúng.
+
+**Ví dụ cho việc tạo User**:
+| Điều kiện | Test 1 | Test 2 | Test 3 | Test 4 |
 |-----------|--------|--------|--------|--------|
-| ID valid | ✓ | ✗ | ✓ | ✓ |
-| Password valid | ✓ | ✓ | ✗ | ✓ |
-| Email valid | ✓ | ✓ | ✓ | ✗ |
-| Email unique | ✓ | ✓ | ✓ | ✗ |
-| **Result** | **Success** | **Fail** | **Fail** | **Fail** |
+| ID hợp lệ | ✓ | ✗ | ✓ | ✓ |
+| Password hợp lệ | ✓ | ✓ | ✗ | ✓ |
+| Email hợp lệ | ✓ | ✓ | ✓ | ✗ |
+| Email duy nhất | ✓ | ✓ | ✓ | ✗ |
+| **Kết quả** | **Thành công** | **Thất bại** | **Thất bại** | **Thất bại** |
 
-**Applied to**: Complex constraint validation scenarios
-
----
-
-### 5. Positive Testing
-**Description**: Testing with valid inputs to verify expected behavior.
-
-**Examples**:
-- Create user with all valid fields
-- Update video with valid data
-- Delete favorite that exists
-- Search with valid keywords
-
-**Test Count**: ~120 positive test cases
+**Áp dụng cho**: Các kịch bản xác thực ràng buộc phức tạp
 
 ---
 
-### 6. Negative Testing
-**Description**: Testing with invalid inputs to verify error handling.
+### 5. Kiểm thử tích cực (Positive Testing)
+**Mô tả**: Kiểm thử với dữ liệu đầu vào hợp lệ để xác minh hành vi mong đợi.
 
-**Examples**:
-- Create user with NULL required fields
-- Update with non-existent ID
-- Delete with invalid ID
-- Insert duplicate unique keys
-- Exceed field length constraints
+**Ví dụ**:
+- Tạo user với tất cả các trường hợp lệ
+- Cập nhật video với dữ liệu hợp lệ
+- Xóa favorite tồn tại
+- Tìm kiếm với từ khóa hợp lệ
 
-**Test Count**: ~53 negative test cases
-
----
-
-### 7. Functional Testing
-**Description**: Verifying that features work according to requirements.
-
-**Coverage**:
-- CRUD operations for all entities
-- Custom DAO methods (findByEmail, findByActiveTrue, etc.)
-- Search and filter functionality
-- View counting
-- Favorite management
-- Share functionality
-
-**Test Count**: All 173 tests include functional testing
+**Số lượng test**: ~120 test cases tích cực
 
 ---
 
-### 8. Security Testing
-**Description**: Testing security aspects of the application.
+### 6. Kiểm thử tiêu cực (Negative Testing)
+**Mô tả**: Kiểm thử với dữ liệu đầu vào không hợp lệ để xác minh xử lý lỗi.
 
-**Coverage**:
-- Password masking in login form
-- Session management
-- Authentication validation
-- SQL injection prevention (via JPA parameterized queries)
-- Access control (admin vs regular user)
+**Ví dụ**:
+- Tạo user với các trường bắt buộc NULL
+- Cập nhật với ID không tồn tại
+- Xóa với ID không hợp lệ
+- Chèn khóa duy nhất trùng lặp
+- Vượt quá ràng buộc độ dài trường
 
-**Test Count**: 5 security-focused UI tests
-
----
-
-### 9. Usability Testing
-**Description**: Testing user experience and interface quality.
-
-**Coverage**:
-- Responsive design (desktop, tablet, mobile)
-- Navigation flow
-- Form validation messages
-- Error message clarity
-- Button and link functionality
-
-**Test Count**: 8 usability-focused UI tests
+**Số lượng test**: ~53 test cases tiêu cực
 
 ---
 
-### 10. Regression Testing
-**Description**: Re-running tests to ensure new changes don't break existing functionality.
+### 7. Kiểm thử chức năng (Functional Testing)
+**Mô tả**: Xác minh rằng các tính năng hoạt động theo yêu cầu.
 
-**Implementation**:
-- Full test suite execution in CI/CD
-- Automated on every pull request
-- GitHub Actions workflow
+**Phạm vi**:
+- Các thao tác CRUD cho tất cả các thực thể
+- Các phương thức DAO tùy chỉnh (findByEmail, findByActiveTrue, v.v.)
+- Chức năng tìm kiếm và lọc
+- Đếm lượt xem
+- Quản lý favorite
+- Chức năng chia sẻ
 
-**Coverage**: All 173 tests run automatically
-
----
-
-### 11. Smoke Testing
-**Description**: Quick tests to verify basic functionality.
-
-**Coverage**:
-- Database connection
-- Application server status
-- Core CRUD operations
-- Basic UI page loads
-
-**Implementation**: First few tests in each test class
+**Số lượng test**: Tất cả 173 tests bao gồm kiểm thử chức năng
 
 ---
 
-## Test Automation
+### 8. Kiểm thử bảo mật (Security Testing)
+**Mô tả**: Kiểm thử các khía cạnh bảo mật của ứng dụng.
 
-### Automated Testing
+**Phạm vi**:
+- Ẩn mật khẩu trong form đăng nhập
+- Quản lý phiên
+- Xác thực đăng nhập
+- Ngăn chặn SQL injection (thông qua truy vấn tham số hóa JPA)
+- Kiểm soát truy cập (admin vs người dùng thường)
+
+**Số lượng test**: 5 UI tests tập trung vào bảo mật
+
+---
+
+### 9. Kiểm thử khả năng sử dụng (Usability Testing)
+**Mô tả**: Kiểm thử trải nghiệm người dùng và chất lượng giao diện.
+
+**Phạm vi**:
+- Thiết kế responsive (desktop, tablet, mobile)
+- Luồng điều hướng
+- Thông báo xác thực form
+- Độ rõ ràng của thông báo lỗi
+- Chức năng nút và liên kết
+
+**Số lượng test**: 8 UI tests tập trung vào khả năng sử dụng
+
+---
+
+### 10. Kiểm thử hồi quy (Regression Testing)
+**Mô tả**: Chạy lại các tests để đảm bảo các thay đổi mới không làm hỏng chức năng hiện có.
+
+**Triển khai**:
+- Thực thi toàn bộ test suite trong CI/CD
+- Tự động hóa trên mỗi pull request
+- Quy trình GitHub Actions
+
+**Phạm vi**: Tất cả 173 tests chạy tự động
+
+---
+
+### 11. Kiểm thử khói (Smoke Testing)
+**Mô tả**: Các tests nhanh để xác minh chức năng cơ bản.
+
+**Phạm vi**:
+- Kết nối cơ sở dữ liệu
+- Trạng thái application server
+- Các thao tác CRUD cơ bản
+- Tải trang UI cơ bản
+
+**Triển khai**: Một vài tests đầu tiên trong mỗi test class
+
+---
+
+## Tự động hóa kiểm thử
+
+### Kiểm thử tự động (Automated Testing)
 **Framework**: TestNG + Selenium WebDriver + Maven
 
-**Coverage**: 
-- 100% of backend tests (133 tests)
-- 100% of UI tests (40 tests)
+**Phạm vi**: 
+- 100% backend tests (133 tests)
+- 100% UI tests (40 tests)
 
-**Execution**:
-- Local: `mvn test` or `./run-tests.sh`
-- CI/CD: GitHub Actions on pull requests
-
----
-
-### Continuous Integration (CI/CD)
-**Platform**: GitHub Actions
-
-**Workflow**:
-1. Trigger on pull request
-2. Setup JDK 11
-3. Start MySQL service
-4. Load database schema and seed data
-5. Build application
-6. Run all tests
-7. Generate and upload test reports
+**Thực thi**:
+- Local: `mvn test` hoặc `./run-tests.sh`
+- CI/CD: GitHub Actions trên pull requests
 
 ---
 
-## Test Data Management
+### Tích hợp liên tục (CI/CD)
+**Nền tảng**: GitHub Actions
 
-### Test Data Types
-1. **Seed Data**: Pre-loaded from CSV files (5 users, 21 videos)
-2. **Generated Data**: Created during test execution
-3. **Boundary Data**: Edge cases (min/max lengths, special characters)
-4. **Invalid Data**: NULL, empty, out-of-range values
-
-### Data Cleanup
-- Tests create and clean up their own data
-- Some tests restore modified seed data
-- Tests designed to be idempotent (repeatable)
-
----
-
-## Test Reporting
-
-### Report Types
-1. **Maven Surefire Reports**: HTML, XML, TXT formats
-2. **TestNG Reports**: HTML with detailed results
-3. **CI/CD Artifacts**: Uploaded to GitHub Actions
-4. **Markdown Documentation**: Test case tables with actual results
-
-### Metrics Tracked
-- Total tests executed
-- Pass/Fail count
-- Execution time
-- Coverage percentage
-- Defect count
+**Quy trình**:
+1. Kích hoạt trên pull request
+2. Thiết lập JDK 11
+3. Khởi động dịch vụ MySQL
+4. Load database schema và seed data
+5. Build ứng dụng
+6. Chạy tất cả tests
+7. Tạo và upload báo cáo test
 
 ---
 
-## Summary
+## Quản lý dữ liệu kiểm thử
 
-### Total Test Coverage
-- **Test Cases**: 173 total (133 backend + 40 UI)
-- **Test Types**: 11 different testing approaches
-- **Techniques**: 7 testing techniques (EP, BVA, DT, etc.)
-- **Automation**: 100% automated
-- **CI/CD**: Fully integrated with GitHub Actions
+### Các loại dữ liệu kiểm thử
+1. **Seed Data**: Tải sẵn từ các file CSV (5 users, 21 videos)
+2. **Generated Data**: Được tạo trong quá trình thực thi test
+3. **Boundary Data**: Các trường hợp biên (độ dài min/max, ký tự đặc biệt)
+4. **Invalid Data**: NULL, rỗng, giá trị ngoài phạm vi
 
-### Testing Philosophy
-The PolySys test suite follows industry best practices with comprehensive coverage using multiple testing techniques to ensure software quality, reliability, and maintainability.
+### Dọn dẹp dữ liệu
+- Tests tự tạo và dọn dẹp dữ liệu của riêng mình
+- Một số tests khôi phục lại seed data đã sửa đổi
+- Tests được thiết kế để idempotent (có thể lặp lại)
 
 ---
 
-**Document Version**: 1.0  
-**Last Updated**: 2025-10-20  
-**Status**: Active
+## Báo cáo kiểm thử
+
+### Các loại báo cáo
+1. **Maven Surefire Reports**: Định dạng HTML, XML, TXT
+2. **TestNG Reports**: HTML với kết quả chi tiết
+3. **CI/CD Artifacts**: Upload lên GitHub Actions
+4. **Markdown Documentation**: Bảng test cases với kết quả thực tế
+
+### Các chỉ số theo dõi
+- Tổng số tests đã thực thi
+- Số lượng Pass/Fail
+- Thời gian thực thi
+- Phần trăm độ phủ
+- Số lượng lỗi
+
+---
+
+## Tóm tắt
+
+### Tổng quan độ phủ kiểm thử
+- **Test Cases**: 173 tổng cộng (133 backend + 40 UI)
+- **Loại kiểm thử**: 11 cách tiếp cận kiểm thử khác nhau
+- **Kỹ thuật**: 7 kỹ thuật kiểm thử (EP, BVA, DT, v.v.)
+- **Tự động hóa**: 100% tự động
+- **CI/CD**: Tích hợp đầy đủ với GitHub Actions
+
+### Triết lý kiểm thử
+Bộ test suite PolySys tuân theo các best practices của ngành với độ phủ toàn diện sử dụng nhiều kỹ thuật kiểm thử để đảm bảo chất lượng, độ tin cậy và khả năng bảo trì của phần mềm.
+
+---
+
+**Phiên bản tài liệu**: 1.0  
+**Cập nhật lần cuối**: 2025-10-20  
+**Trạng thái**: Đang hoạt động

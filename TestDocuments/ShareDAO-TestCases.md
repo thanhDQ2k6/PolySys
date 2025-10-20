@@ -1,11 +1,11 @@
-# ShareDAO Test Cases Documentation
+# ShareDAO Test Cases - Tài liệu
 
-## Overview
-This document contains comprehensive test cases for the ShareDAO class, which manages video sharing functionality in the PolySys system.
+## Tổng quan
+Tài liệu này chứa các test cases toàn diện cho class ShareDAO, quản lý chức năng chia sẻ video trong hệ thống PolySys.
 
-## Test Coverage
-- **Total Test Cases**: 23
-- **Coverage Areas**: Create, Read, Delete operations, validation, and edge cases
+## Độ phủ Test
+- **Tổng số Test Cases**: 23
+- **Các lĩnh vực được bao phủ**: Các thao tác Create, Read, Delete, xác thực và trường hợp biên
 
 ## Test Cases
 

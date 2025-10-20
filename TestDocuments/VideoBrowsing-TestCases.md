@@ -1,11 +1,11 @@
-# Video Browsing UI Test Cases Documentation
+# Video Browsing UI Test Cases - Tài liệu
 
-## Overview
-This document contains comprehensive UI test cases for Video Browsing features using Selenium WebDriver and TestNG.
+## Tổng quan
+Tài liệu này chứa các test cases UI toàn diện cho tính năng Duyệt Video sử dụng Selenium WebDriver và TestNG.
 
-## Test Coverage
-- **Total Test Cases**: 15
-- **Coverage Areas**: Video list, detail view, search, navigation, responsive design
+## Độ phủ Test
+- **Tổng số Test Cases**: 15
+- **Các lĩnh vực được bao phủ**: Danh sách video, xem chi tiết, tìm kiếm, điều hướng, thiết kế responsive
 
 ## Test Cases
 

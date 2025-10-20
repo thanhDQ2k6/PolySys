@@ -1,11 +1,11 @@
-# Login UI Test Cases Documentation
+# Login UI Test Cases - Tài liệu
 
-## Overview
-This document contains comprehensive UI test cases for the Login functionality using Selenium WebDriver and TestNG.
+## Tổng quan
+Tài liệu này chứa các test cases UI toàn diện cho chức năng Đăng nhập sử dụng Selenium WebDriver và TestNG.
 
-## Test Coverage
-- **Total Test Cases**: 10
-- **Coverage Areas**: Page load, authentication, validation, session management
+## Độ phủ Test
+- **Tổng số Test Cases**: 10
+- **Các lĩnh vực được bao phủ**: Tải trang, xác thực, validation, quản lý phiên
 
 ## Test Cases
 

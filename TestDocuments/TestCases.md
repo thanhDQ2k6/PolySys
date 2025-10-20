@@ -1,17 +1,17 @@
-# Test Execution Results
+# Kết quả Thực thi Kiểm thử
 
-## Overview
-This document summarizes the test execution status for UserDAO and VideoDAO test suites.
+## Tổng quan
+Tài liệu này tóm tắt trạng thái thực thi kiểm thử cho các bộ test suite UserDAO và VideoDAO.
 
-## Test Environment
+## Môi trường Kiểm thử
 - **Framework**: TestNG 7.8.0
-- **UI Testing**: Selenium WebDriver 4.15.0 with ChromeDriver
+- **UI Testing**: Selenium WebDriver 4.15.0 với ChromeDriver
 - **Database**: MySQL 8.0
 - **JDK**: Java 17
 - **Build Tool**: Maven 3.9.11
 
-## Compilation Status
-✅ **All test classes compiled successfully**
+## Trạng thái Biên dịch
+✅ **Tất cả các test classes biên dịch thành công**
 - UserDAOTest.java - 40 test methods
 - VideoDAOTest.java - 50 test methods
 - FavoriteDAOTest.java - 20 test methods
@@ -20,169 +20,169 @@ This document summarizes the test execution status for UserDAO and VideoDAO test
 - VideoBrowsingUITest.java - 15 UI test methods
 - VideoManagementUITest.java - 15 UI test methods
 
-**Total Test Methods**: 173 tests (133 backend + 40 UI)
+**Tổng số Test Methods**: 173 tests (133 backend + 40 UI)
 
-## Test Execution Prerequisites
+## Điều kiện Tiên quyết để Thực thi Test
 
-### For Backend Tests (All DAO Tests):
-1. MySQL server must be running
-2. Database `polysys` must exist
-3. Tables must be created using `/src/main/resources/Database Generator/db-boot.sql`
-4. Sample data must be loaded from CSV files:
+### Đối với Backend Tests (Tất cả DAO Tests):
+1. MySQL server phải đang chạy
+2. Database `polysys` phải tồn tại
+3. Các bảng phải được tạo bằng `/src/main/resources/Database Generator/db-boot.sql`
+4. Dữ liệu mẫu phải được tải từ các file CSV:
    - user.csv (5 users: admin, user01-user05)
    - video.csv (21 videos: V01-V21)
-   - favorite.csv (sample favorites)
-   - share.csv (sample shares)
-5. Database credentials in persistence.xml must match (user: root, password: 12345)
+   - favorite.csv (favorite mẫu)
+   - share.csv (share mẫu)
+5. Thông tin đăng nhập database trong persistence.xml phải khớp (user: root, password: 12345)
 
-### For UI Tests (VideoManagementUITest):
-1. All backend prerequisites
-2. Application server must be running at `http://localhost:8080/PolySys`
-3. Chrome/Chromium browser installed
-4. ChromeDriver compatible with Chrome version
+### Đối với UI Tests (VideoManagementUITest):
+1. Tất cả điều kiện tiên quyết của backend
+2. Application server phải đang chạy tại `http://localhost:8080/PolySys`
+3. Trình duyệt Chrome/Chromium đã cài đặt
+4. ChromeDriver tương thích với phiên bản Chrome
 
-## Expected Test Results
+## Kết quả Test Dự kiến
 
 ### UserDAO Tests (40 tests)
-Based on black-box testing techniques covering:
-- **Equivalence Partitioning**: Valid/invalid inputs for each field
-- **Boundary Value Analysis**: Field length constraints (id: 20, password: 50, fullName: 50, email: 50)
-- **Decision Table**: Constraint combinations (unique email, NOT NULL fields)
+Dựa trên các kỹ thuật kiểm thử hộp đen bao gồm:
+- **Phân vùng Tương đương**: Đầu vào hợp lệ/không hợp lệ cho mỗi trường
+- **Phân tích Giá trị Biên**: Ràng buộc độ dài trường (id: 20, password: 50, fullName: 50, email: 50)
+- **Bảng Quyết định**: Tổ hợp ràng buộc (email duy nhất, trường NOT NULL)
 
-**Expected Pass Rate**: 35-38 tests (87.5-95%)
-**Expected Failures**: 2-5 tests
-- Tests with id/email > max length should fail due to constraint violations
-- Tests with NULL required fields should fail
-- Duplicate key/email tests should fail as expected
+**Tỷ lệ Pass Dự kiến**: 35-38 tests (87.5-95%)
+**Failures Dự kiến**: 2-5 tests
+- Tests với id/email > độ dài max sẽ fail do vi phạm ràng buộc
+- Tests với trường NOT NULL có giá trị NULL sẽ fail
+- Tests khóa/email trùng lặp sẽ fail như mong đợi
 
 ### VideoDAO Tests (50 tests)
-Based on black-box testing techniques covering:
-- **Equivalence Partitioning**: Valid/invalid inputs for each field
-- **Boundary Value Analysis**: Field length constraints (id: 11, title: 255, posterUrl: 255, link: 255)
-- **Decision Table**: Constraint combinations
+Dựa trên các kỹ thuật kiểm thử hộp đen bao gồm:
+- **Phân vùng Tương đương**: Đầu vào hợp lệ/không hợp lệ cho mỗi trường
+- **Phân tích Giá trị Biên**: Ràng buộc độ dài trường (id: 11, title: 255, posterUrl: 255, link: 255)
+- **Bảng Quyết định**: Tổ hợp ràng buộc
 - **Custom Methods**: findByActiveTrue(), findByTitleContaining(), countByActiveTrue(), increaseView()
 
-**Expected Pass Rate**: 45-48 tests (90-96%)
-**Expected Failures**: 2-5 tests
-- Tests with fields > max length should fail due to constraint violations
-- Tests with NULL required fields should fail
-- Duplicate id tests should fail as expected
+**Tỷ lệ Pass Dự kiến**: 45-48 tests (90-96%)
+**Failures Dự kiến**: 2-5 tests
+- Tests với trường > độ dài max sẽ fail do vi phạm ràng buộc
+- Tests với trường NOT NULL có giá trị NULL sẽ fail
+- Tests id trùng lặp sẽ fail như mong đợi
 
 ### VideoManagementUITest (15 tests)
-UI tests for admin video management interface covering:
-- Page load and element presence
-- Form validation
-- CRUD operations (Create, Read, Update, Delete)
-- Navigation and interactivity
-- Responsive design
+UI tests cho giao diện quản lý video của admin bao gồm:
+- Tải trang và hiện diện phần tử
+- Xác thực form
+- Các thao tác CRUD (Create, Read, Update, Delete)
+- Điều hướng và tương tác
+- Thiết kế responsive
 
-**Expected Pass Rate**: 12-15 tests (80-100%)
-**Expected Failures**: 0-3 tests
-- Server availability dependent tests will be skipped if server not running
-- Some tests may fail if JavaScript execution timing is off
+**Tỷ lệ Pass Dự kiến**: 12-15 tests (80-100%)
+**Failures Dự kiến**: 0-3 tests
+- Tests phụ thuộc vào server sẽ bị bỏ qua nếu server không chạy
+- Một số tests có thể fail nếu thời gian thực thi JavaScript không đúng
 
-## How to Run Tests
+## Cách Chạy Tests
 
-### Backend Tests Only
+### Chỉ Backend Tests
 ```bash
-# Setup database first
+# Setup database trước
 mysql -u root -p12345 < src/main/resources/Database\ Generator/db-boot.sql
 
-# Load sample data
+# Load dữ liệu mẫu
 mysql -u root -p12345 polysys < import_data.sql
 
-# Run DAO tests
+# Chạy DAO tests
 mvn test -Dtest=UserDAOTest
 mvn test -Dtest=VideoDAOTest
 
-# Or run all backend tests
+# Hoặc chạy tất cả backend tests
 mvn test -Dtest=*DAOTest
 ```
 
 ### UI Tests
 ```bash
-# Start application server first (e.g., Tomcat)
-# Then run UI tests
+# Khởi động application server trước (ví dụ: Tomcat)
+# Sau đó chạy UI tests
 mvn test -Dtest=VideoManagementUITest
 ```
 
-### All Tests
+### Tất cả Tests
 ```bash
 mvn test
 ```
 
-## Test Coverage Summary
+## Tóm tắt Độ phủ Test
 
-### UserDAO Test Coverage
-| Category | Test Cases | Coverage |
+### Độ phủ UserDAO Test
+| Danh mục | Test Cases | Độ phủ |
 |----------|------------|----------|
-| Create Operations | 23 | Boundary values, null checks, duplicates, all fields |
-| Read Operations | 5 | Find by ID, find all, find by email, exists check, count |
-| Update Operations | 5 | Valid update, non-existent, duplicate email, field updates |
-| Delete Operations | 3 | Valid delete, non-existent, null ID |
+| Thao tác Create | 23 | Giá trị biên, kiểm tra null, trùng lặp, tất cả trường |
+| Thao tác Read | 5 | Tìm theo ID, tìm tất cả, tìm theo email, kiểm tra tồn tại, đếm |
+| Thao tác Update | 5 | Cập nhật hợp lệ, không tồn tại, email trùng lặp, cập nhật trường |
+| Thao tác Delete | 3 | Xóa hợp lệ, không tồn tại, ID null |
 | Custom Methods | 4 | findByEmail, existsByEmail |
-| **Total** | **40** | **100% method coverage** |
+| **Tổng** | **40** | **100% độ phủ method** |
 
-### VideoDAO Test Coverage
-| Category | Test Cases | Coverage |
+### Độ phủ VideoDAO Test
+| Danh mục | Test Cases | Độ phủ |
 |----------|------------|----------|
-| Create Operations | 28 | Boundary values, null checks, duplicates, all fields |
-| Read Operations | 4 | Find by ID, find all, null ID |
-| Update Operations | 5 | Valid update, non-existent, status, views, all fields |
-| Delete Operations | 3 | Valid delete, non-existent, null ID |
+| Thao tác Create | 28 | Giá trị biên, kiểm tra null, trùng lặp, tất cả trường |
+| Thao tác Read | 4 | Tìm theo ID, tìm tất cả, ID null |
+| Thao tác Update | 5 | Cập nhật hợp lệ, không tồn tại, status, views, tất cả trường |
+| Thao tác Delete | 3 | Xóa hợp lệ, không tồn tại, ID null |
 | Custom Methods | 10 | findByActiveTrue, findByTitleContaining, countByActiveTrue, increaseView |
-| **Total** | **50** | **100% method coverage** |
+| **Tổng** | **50** | **100% độ phủ method** |
 
-### VideoManagement UI Test Coverage
-| Category | Test Cases | Coverage |
+### Độ phủ VideoManagement UI Test
+| Danh mục | Test Cases | Độ phủ |
 |----------|------------|----------|
-| Page Load | 1 | Admin page loads correctly |
-| Form Elements | 3 | Required fields, action buttons, validation |
-| Navigation | 2 | Tab switching, sidebar navigation |
-| CRUD Operations | 4 | Create, update, delete, reset |
-| User Interaction | 5 | URL extraction, radio buttons, sidebar toggle, responsiveness, max length |
-| **Total** | **15** | **Key user flows covered** |
+| Tải trang | 1 | Trang admin tải đúng |
+| Phần tử Form | 3 | Trường bắt buộc, nút hành động, xác thực |
+| Điều hướng | 2 | Chuyển tab, điều hướng sidebar |
+| Thao tác CRUD | 4 | Create, update, delete, reset |
+| Tương tác Người dùng | 5 | Trích xuất URL, nút radio, toggle sidebar, responsive, độ dài max |
+| **Tổng** | **15** | **Luồng người dùng chính được bao phủ** |
 
-## Black-Box Testing Techniques Applied
+## Kỹ thuật Kiểm thử Hộp đen Được Áp dụng
 
-### 1. Equivalence Partitioning (EP)
-- **Valid Partitions**: Proper data types, within constraints, non-empty
-- **Invalid Partitions**: NULL values, empty strings, out of range, duplicates
-- **Example**: Email field - valid email, invalid format, duplicate, NULL
+### 1. Phân vùng Tương đương (EP)
+- **Phân vùng Hợp lệ**: Kiểu dữ liệu đúng, trong ràng buộc, không rỗng
+- **Phân vùng Không hợp lệ**: Giá trị NULL, chuỗi rỗng, ngoài phạm vi, trùng lặp
+- **Ví dụ**: Trường Email - email hợp lệ, định dạng không hợp lệ, trùng lặp, NULL
 
-### 2. Boundary Value Analysis (BVA)
-- **Minimum Boundaries**: Empty string, 1 character
-- **Maximum Boundaries**: Exact max length (11, 20, 50, 255 chars)
-- **Beyond Boundaries**: Max + 1 character
-- **Example**: UserID (varchar(20)) - tested with 1, 20, and 21 characters
+### 2. Phân tích Giá trị Biên (BVA)
+- **Ranh giới Tối thiểu**: Chuỗi rỗng, 1 ký tự
+- **Ranh giới Tối đa**: Độ dài max chính xác (11, 20, 50, 255 ký tự)
+- **Vượt Ranh giới**: Max + 1 ký tự
+- **Ví dụ**: UserID (varchar(20)) - kiểm thử với 1, 20, và 21 ký tự
 
-### 3. Decision Table Testing (DT)
-- **Multiple Conditions**: Combined constraints (NOT NULL + UNIQUE + length)
-- **Actions**: Success/Fail based on condition combinations
-- **Example**: User creation requires valid ID, password, fullName, email (NOT NULL) and unique email
+### 3. Kiểm thử Bảng Quyết định (DT)
+- **Nhiều Điều kiện**: Ràng buộc kết hợp (NOT NULL + UNIQUE + độ dài)
+- **Hành động**: Thành công/Thất bại dựa trên tổ hợp điều kiện
+- **Ví dụ**: Tạo user yêu cầu ID, password, fullName, email hợp lệ (NOT NULL) và email duy nhất
 
-## Test Maintenance Notes
+## Ghi chú Bảo trì Test
 
-### When to Update Tests:
-1. **Schema Changes**: If database schema changes (field lengths, constraints), update boundary tests
-2. **New Methods**: When new DAO methods are added, add corresponding test cases
-3. **Business Logic**: If validation rules change, update equivalence partitions
-4. **UI Changes**: If admin interface is redesigned, update element locators in UI tests
+### Khi nào Cập nhật Tests:
+1. **Thay đổi Schema**: Nếu database schema thay đổi (độ dài trường, ràng buộc), cập nhật boundary tests
+2. **Methods Mới**: Khi thêm DAO methods mới, thêm test cases tương ứng
+3. **Logic Nghiệp vụ**: Nếu quy tắc xác thực thay đổi, cập nhật phân vùng tương đương
+4. **Thay đổi UI**: Nếu giao diện admin được thiết kế lại, cập nhật element locators trong UI tests
 
-### Test Data Dependencies:
-- Tests assume CSV data is loaded (5 users, 21 videos)
-- Tests create and cleanup their own test data where possible
-- Some tests modify existing data and restore it afterward
-- Tests should be idempotent and not interfere with each other
+### Phụ thuộc Dữ liệu Test:
+- Tests giả định dữ liệu CSV đã được tải (5 users, 21 videos)
+- Tests tự tạo và dọn dẹp dữ liệu test của riêng mình khi có thể
+- Một số tests sửa đổi dữ liệu hiện có và khôi phục lại sau đó
+- Tests nên idempotent và không can thiệp lẫn nhau
 
-## Conclusion
+## Kết luận
 
-This comprehensive test suite provides:
-- ✅ **90+ test cases** covering all DAO operations and UI functionality
-- ✅ **Black-box testing techniques** ensuring thorough validation
-- ✅ **Boundary value analysis** for all constrained fields
-- ✅ **Equivalence partitioning** for valid/invalid inputs
-- ✅ **Decision table testing** for complex constraint combinations
-- ✅ **UI testing** for end-to-end CRUD operations
+Bộ test suite toàn diện này cung cấp:
+- ✅ **90+ test cases** bao phủ tất cả thao tác DAO và chức năng UI
+- ✅ **Kỹ thuật kiểm thử hộp đen** đảm bảo xác thực kỹ lưỡng
+- ✅ **Phân tích giá trị biên** cho tất cả trường có ràng buộc
+- ✅ **Phân vùng tương đương** cho đầu vào hợp lệ/không hợp lệ
+- ✅ **Kiểm thử bảng quyết định** cho tổ hợp ràng buộc phức tạp
+- ✅ **Kiểm thử UI** cho các thao tác CRUD end-to-end
 
-The tests are ready to execute once the database is properly configured and the application server is running.
+Các tests sẵn sàng thực thi khi database được cấu hình đúng và application server đang chạy.

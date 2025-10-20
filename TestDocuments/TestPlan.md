@@ -1,13 +1,13 @@
-# PolySys System Test Plan
+# Kế hoạch Kiểm thử Hệ thống PolySys
 
-## 1. Introduction
+## 1. Giới thiệu
 
-### 1.1 Purpose
-This test plan document outlines the comprehensive testing strategy for the PolySys video management system. It defines the scope, approach, resources, and schedule of testing activities.
+### 1.1 Mục đích
+Tài liệu kế hoạch kiểm thử này phác thảo chiến lược kiểm thử toàn diện cho hệ thống quản lý video PolySys. Nó xác định phạm vi, cách tiếp cận, tài nguyên và lịch trình của các hoạt động kiểm thử.
 
-### 1.2 Project Overview
-**Project Name**: PolySys - Video Management System
-**Version**: 1.0-SNAPSHOT
+### 1.2 Tổng quan dự án
+**Tên dự án**: PolySys - Hệ thống Quản lý Video
+**Phiên bản**: 1.0-SNAPSHOT
 **Technology Stack**: 
 - Backend: Java 11, Hibernate JPA, MySQL
 - Frontend: JSP, JSTL, JavaScript
@@ -15,174 +15,174 @@ This test plan document outlines the comprehensive testing strategy for the Poly
 - Build: Maven
 - CI/CD: GitHub Actions
 
-### 1.3 Document Scope
-This document covers:
-- Unit and Integration testing for Data Access Layer (DAO)
-- User Interface (UI) testing using Selenium
-- Test case documentation and execution procedures
-- CI/CD integration and automated testing
+### 1.3 Phạm vi tài liệu
+Tài liệu này bao gồm:
+- Kiểm thử đơn vị và tích hợp cho tầng truy cập dữ liệu (DAO)
+- Kiểm thử giao diện người dùng (UI) sử dụng Selenium
+- Tài liệu test case và quy trình thực thi
+- Tích hợp CI/CD và kiểm thử tự động
 
-## 2. Test Strategy
+## 2. Chiến lược Kiểm thử
 
-### 2.1 Testing Levels
+### 2.1 Các cấp độ Kiểm thử
 
-#### 2.1.1 Unit Testing
-- **Scope**: Individual DAO methods
+#### 2.1.1 Kiểm thử Đơn vị (Unit Testing)
+- **Phạm vi**: Các phương thức DAO riêng lẻ
 - **Framework**: TestNG
-- **Coverage**: UserDAO, VideoDAO, FavoriteDAO, ShareDAO
-- **Total Tests**: 133 test cases
+- **Độ phủ**: UserDAO, VideoDAO, FavoriteDAO, ShareDAO
+- **Tổng số Tests**: 133 test cases
 
-#### 2.1.2 Integration Testing
-- **Scope**: Database integration, entity relationships
-- **Framework**: TestNG with JPA/Hibernate
-- **Coverage**: CRUD operations, custom queries, transactions
+#### 2.1.2 Kiểm thử Tích hợp (Integration Testing)
+- **Phạm vi**: Tích hợp cơ sở dữ liệu, quan hệ thực thể
+- **Framework**: TestNG với JPA/Hibernate
+- **Độ phủ**: Các thao tác CRUD, truy vấn tùy chỉnh, giao dịch
 
-#### 2.1.3 UI Testing
-- **Scope**: User interfaces and workflows
+#### 2.1.3 Kiểm thử UI (UI Testing)
+- **Phạm vi**: Giao diện người dùng và quy trình làm việc
 - **Framework**: Selenium WebDriver + TestNG
-- **Coverage**: Login, Video Browsing, Admin Management
-- **Total Tests**: 40 test cases
+- **Độ phủ**: Đăng nhập, Duyệt Video, Quản lý Admin
+- **Tổng số Tests**: 40 test cases
 
-### 2.2 Testing Types
+### 2.2 Các loại Kiểm thử
 
-#### 2.2.1 Functional Testing
-- Verify all features work as specified
-- Test CRUD operations for all entities
-- Validate business logic and workflows
+#### 2.2.1 Kiểm thử Chức năng (Functional Testing)
+- Xác minh tất cả các tính năng hoạt động như được chỉ định
+- Kiểm thử các thao tác CRUD cho tất cả các thực thể
+- Xác thực logic nghiệp vụ và quy trình làm việc
 
-#### 2.2.2 Black-Box Testing Techniques
-- **Equivalence Partitioning**: Valid/invalid data classes
-- **Boundary Value Analysis**: Min/max field lengths
-- **Decision Table Testing**: Combination of constraints
+#### 2.2.2 Kỹ thuật Kiểm thử Hộp đen (Black-Box Testing)
+- **Phân vùng Tương đương**: Các lớp dữ liệu hợp lệ/không hợp lệ
+- **Phân tích Giá trị Biên**: Độ dài trường min/max
+- **Kiểm thử Bảng Quyết định**: Tổ hợp các ràng buộc
 
-#### 2.2.3 Negative Testing
-- Test with null values
-- Test with invalid data (too long, wrong format)
-- Test duplicate key violations
-- Test constraint violations
+#### 2.2.3 Kiểm thử Tiêu cực (Negative Testing)
+- Kiểm thử với giá trị null
+- Kiểm thử với dữ liệu không hợp lệ (quá dài, sai định dạng)
+- Kiểm thử vi phạm khóa trùng lặp
+- Kiểm thử vi phạm ràng buộc
 
-#### 2.2.4 Security Testing
-- Password masking in UI
-- Session management
-- Authentication and authorization
-- SQL injection prevention (via JPA)
+#### 2.2.4 Kiểm thử Bảo mật (Security Testing)
+- Ẩn mật khẩu trong UI
+- Quản lý phiên
+- Xác thực và phân quyền
+- Ngăn chặn SQL injection (thông qua JPA)
 
-#### 2.2.5 Usability Testing
-- Responsive design (desktop, tablet, mobile)
-- Navigation flow
-- Error message clarity
+#### 2.2.5 Kiểm thử Khả năng Sử dụng (Usability Testing)
+- Thiết kế responsive (desktop, tablet, mobile)
+- Luồng điều hướng
+- Độ rõ ràng của thông báo lỗi
 
-## 3. Test Coverage
+## 3. Độ phủ Kiểm thử
 
-### 3.1 Backend DAO Tests
+### 3.1 Kiểm thử Backend DAO
 
-| Component | Test Cases | Coverage |
+| Thành phần | Test Cases | Độ phủ |
 |-----------|-----------|----------|
 | UserDAO | 40 | Create (23), Read (5), Update (5), Delete (3), Custom (4) |
 | VideoDAO | 50 | Create (28), Read (4), Update (5), Delete (3), Custom (10) |
 | FavoriteDAO | 20 | Create (5), Read (6), Delete (2), Count (2), Advanced (5) |
 | ShareDAO | 23 | Create (8), Read (5), Delete (2), Count (2), Advanced (6) |
-| **Total** | **133** | **Complete CRUD + Business Logic** |
+| **Tổng** | **133** | **CRUD đầy đủ + Logic nghiệp vụ** |
 
-### 3.2 UI Tests
+### 3.2 Kiểm thử UI
 
-| Component | Test Cases | Coverage |
+| Thành phần | Test Cases | Độ phủ |
 |-----------|-----------|----------|
-| Login UI | 10 | Page load, authentication, validation, session |
-| Video Browsing UI | 15 | Display, search, pagination, interactions |
-| Video Management UI | 15 | Admin CRUD, form validation, navigation |
-| **Total** | **40** | **Complete User Workflows** |
+| Login UI | 10 | Tải trang, xác thực, validation, session |
+| Video Browsing UI | 15 | Hiển thị, tìm kiếm, phân trang, tương tác |
+| Video Management UI | 15 | CRUD Admin, validation form, điều hướng |
+| **Tổng** | **40** | **Quy trình người dùng đầy đủ** |
 
-### 3.3 Field Validation Coverage
+### 3.3 Độ phủ Xác thực Trường
 
-#### User Entity
+#### Thực thể User
 - **id**: VARCHAR(20), NOT NULL, UNIQUE
-  - Tests: null, empty, 1 char, 20 chars, 21 chars, duplicate
+  - Tests: null, rỗng, 1 ký tự, 20 ký tự, 21 ký tự, trùng lặp
 - **password**: VARCHAR(50), NOT NULL
-  - Tests: null, empty, 50 chars, 51 chars
+  - Tests: null, rỗng, 50 ký tự, 51 ký tự
 - **fullName**: VARCHAR(50), NOT NULL
-  - Tests: null, empty, 50 chars, 51 chars
+  - Tests: null, rỗng, 50 ký tự, 51 ký tự
 - **email**: VARCHAR(50), NOT NULL, UNIQUE
-  - Tests: null, invalid format, valid, 50 chars, 51 chars, duplicate
+  - Tests: null, định dạng không hợp lệ, hợp lệ, 50 ký tự, 51 ký tự, trùng lặp
 - **admin**: BOOLEAN, NOT NULL
   - Tests: true, false
 
-#### Video Entity
+#### Thực thể Video
 - **id**: VARCHAR(11), NOT NULL, UNIQUE
-  - Tests: null, empty, <11, 11 chars, >11, duplicate
+  - Tests: null, rỗng, <11, 11 ký tự, >11, trùng lặp
 - **title**: VARCHAR(255), NOT NULL
-  - Tests: null, empty, 1 char, 255 chars, 256 chars
+  - Tests: null, rỗng, 1 ký tự, 255 ký tự, 256 ký tự
 - **posterUrl**: VARCHAR(255), NOT NULL
-  - Tests: null, empty, 255 chars, 256 chars
+  - Tests: null, rỗng, 255 ký tự, 256 ký tự
 - **description**: LONGTEXT, nullable
-  - Tests: null, empty, very long (10000 chars)
+  - Tests: null, rỗng, rất dài (10000 ký tự)
 - **active**: BOOLEAN, NOT NULL
   - Tests: true, false
 - **views**: INT, NOT NULL
-  - Tests: 0, negative, large numbers
+  - Tests: 0, âm, số lớn
 - **link**: VARCHAR(255), NOT NULL
-  - Tests: null, empty, 255 chars, 256 chars
+  - Tests: null, rỗng, 255 ký tự, 256 ký tự
 
-#### Favorite Entity
+#### Thực thể Favorite
 - **user**: Foreign Key, NOT NULL
 - **video**: Foreign Key, NOT NULL
 - **likeDate**: DATE, NOT NULL
-- **Unique Constraint**: (user, video)
-  - Tests: null fields, duplicate combination, past/future dates
+- **Ràng buộc Unique**: (user, video)
+  - Tests: trường null, tổ hợp trùng lặp, ngày quá khứ/tương lai
 
-#### Share Entity
+#### Thực thể Share
 - **user**: Foreign Key, NOT NULL
 - **video**: Foreign Key, NOT NULL
 - **emails**: VARCHAR(50), NOT NULL
-  - Tests: null, empty, 50 chars, 51 chars, multiple emails
+  - Tests: null, rỗng, 50 ký tự, 51 ký tự, nhiều emails
 - **shareDate**: DATE, NOT NULL
-  - Tests: null, past/future dates
+  - Tests: null, ngày quá khứ/tương lai
 
-## 4. Test Environment
+## 4. Môi trường Kiểm thử
 
-### 4.1 Hardware Requirements
-- **Development**: Standard development machine
+### 4.1 Yêu cầu Phần cứng
+- **Development**: Máy development tiêu chuẩn
 - **CI/CD**: GitHub Actions Ubuntu runner
 
-### 4.2 Software Requirements
-- **JDK**: 11 or higher
-- **MySQL**: 8.0 or higher
+### 4.2 Yêu cầu Phần mềm
+- **JDK**: 11 hoặc cao hơn
+- **MySQL**: 8.0 hoặc cao hơn
 - **Maven**: 3.6+
-- **Chrome/Chromium**: Latest version
-- **ChromeDriver**: Compatible with browser version
+- **Chrome/Chromium**: Phiên bản mới nhất
+- **ChromeDriver**: Tương thích với phiên bản trình duyệt
 
-### 4.3 Test Data
+### 4.3 Dữ liệu Kiểm thử
 - **Users**: 5 test users (user01-user05, admin)
 - **Videos**: 21 test videos (V01-V21)
-- **Favorites**: Sample favorite data
-- **Shares**: Sample share data
+- **Favorites**: Dữ liệu favorite mẫu
+- **Shares**: Dữ liệu share mẫu
 
-### 4.4 Database Setup
+### 4.4 Thiết lập Cơ sở dữ liệu
 ```sql
 Database: polysys
 Character Set: utf8mb4
 Collation: utf8mb4_unicode_ci
 ```
 
-## 5. Test Execution
+## 5. Thực thi Kiểm thử
 
-### 5.1 Test Execution Strategy
+### 5.1 Chiến lược Thực thi Kiểm thử
 1. **Local Development**:
-   - Run individual test classes during development
-   - Run full test suite before commits
+   - Chạy các test classes riêng lẻ trong quá trình phát triển
+   - Chạy full test suite trước khi commit
    
 2. **Continuous Integration**:
-   - Automated test execution on pull requests
-   - MySQL service container for database tests
-   - Headless browser for UI tests
+   - Thực thi test tự động trên pull requests
+   - MySQL service container cho database tests
+   - Headless browser cho UI tests
 
-### 5.2 Test Execution Commands
+### 5.2 Lệnh Thực thi Kiểm thử
 
 ```bash
-# Run all tests
+# Chạy tất cả tests
 mvn test
 
-# Run specific test class
+# Chạy test class cụ thể
 mvn test -Dtest=UserDAOTest
 mvn test -Dtest=VideoDAOTest
 mvn test -Dtest=FavoriteDAOTest
@@ -191,44 +191,44 @@ mvn test -Dtest=LoginUITest
 mvn test -Dtest=VideoBrowsingUITest
 mvn test -Dtest=VideoManagementUITest
 
-# Run only DAO tests
+# Chỉ chạy DAO tests
 mvn test -Dtest=*DAOTest
 
-# Run only UI tests
+# Chỉ chạy UI tests
 mvn test -Dtest=*UITest
 
-# Using shell script (recommended)
-./run-tests.sh          # All tests
-./run-tests.sh backend  # Only backend tests
-./run-tests.sh ui       # Only UI tests
+# Sử dụng shell script (khuyến nghị)
+./run-tests.sh          # Tất cả tests
+./run-tests.sh backend  # Chỉ backend tests
+./run-tests.sh ui       # Chỉ UI tests
 ```
 
 ### 5.3 CI/CD Pipeline
-- **Trigger**: Pull request to main branch
-- **Steps**:
+- **Kích hoạt**: Pull request đến main branch
+- **Các bước**:
   1. Checkout code
   2. Setup JDK 11
-  3. Start MySQL service
-  4. Load database schema and seed data
-  5. Build application (skip tests)
-  6. Run DAO tests
-  7. Upload test reports
+  3. Khởi động MySQL service
+  4. Load database schema và seed data
+  5. Build ứng dụng (bỏ qua tests)
+  6. Chạy DAO tests
+  7. Upload báo cáo test
 
-## 6. Test Deliverables
+## 6. Sản phẩm Bàn giao Kiểm thử
 
-### 6.1 Test Documentation
-- ✅ MasterDocument.md - Master test documentation (overview and instructions)
-- ✅ TestTypes.md - Complete list of all test types used
-- ✅ TestPlan.md - Detailed test plan (this document)
-- ✅ TestCases.md - Test execution results and analysis
-- ✅ UserDAO-TestCases.md - User DAO test cases
-- ✅ VideoDAO-TestCases.md - Video DAO test cases
-- ✅ FavoriteDAO-TestCases.md - Favorite DAO test cases
-- ✅ ShareDAO-TestCases.md - Share DAO test cases
-- ✅ LoginUI-TestCases.md - Login UI test cases
-- ✅ VideoBrowsing-TestCases.md - Video browsing UI test cases
+### 6.1 Tài liệu Kiểm thử
+- ✅ MasterDocument.md - Tài liệu kiểm thử tổng hợp (tổng quan và hướng dẫn)
+- ✅ TestTypes.md - Danh sách đầy đủ tất cả các loại kiểm thử được sử dụng
+- ✅ TestPlan.md - Kế hoạch kiểm thử chi tiết (tài liệu này)
+- ✅ TestCases.md - Kết quả thực thi kiểm thử và phân tích
+- ✅ UserDAO-TestCases.md - Test cases User DAO
+- ✅ VideoDAO-TestCases.md - Test cases Video DAO
+- ✅ FavoriteDAO-TestCases.md - Test cases Favorite DAO
+- ✅ ShareDAO-TestCases.md - Test cases Share DAO
+- ✅ LoginUI-TestCases.md - Test cases Login UI
+- ✅ VideoBrowsing-TestCases.md - Test cases Video browsing UI
 
-### 6.2 Test Code
+### 6.2 Mã Kiểm thử
 - ✅ src/test/java/dao/UserDAOTest.java
 - ✅ src/test/java/dao/VideoDAOTest.java
 - ✅ src/test/java/dao/FavoriteDAOTest.java
@@ -237,99 +237,99 @@ mvn test -Dtest=*UITest
 - ✅ src/test/java/ui/VideoBrowsingUITest.java
 - ✅ src/test/java/ui/VideoManagementUITest.java
 
-### 6.3 Test Reports
+### 6.3 Báo cáo Kiểm thử
 - Maven Surefire Reports (HTML/XML/TXT)
 - TestNG Reports (HTML)
-- CI/CD Artifacts (uploaded to GitHub Actions)
+- CI/CD Artifacts (upload lên GitHub Actions)
 
-## 7. Entry and Exit Criteria
+## 7. Tiêu chí Vào và Ra
 
-### 7.1 Entry Criteria
-- ✅ Database schema created
-- ✅ Test data loaded
-- ✅ Application builds successfully
-- ✅ Test environment configured
-- ✅ All test code compiles
+### 7.1 Tiêu chí Vào
+- ✅ Database schema đã được tạo
+- ✅ Dữ liệu test đã được tải
+- ✅ Ứng dụng build thành công
+- ✅ Môi trường test đã được cấu hình
+- ✅ Tất cả mã test biên dịch thành công
 
-### 7.2 Exit Criteria
-- ✅ All test cases executed
-- ✅ Pass rate ≥ 85% for backend tests
-- ✅ Pass rate ≥ 75% for UI tests
-- ✅ All critical defects resolved
-- ✅ Test reports generated
+### 7.2 Tiêu chí Ra
+- ✅ Tất cả test cases đã được thực thi
+- ✅ Tỷ lệ pass ≥ 85% cho backend tests
+- ✅ Tỷ lệ pass ≥ 75% cho UI tests
+- ✅ Tất cả lỗi nghiêm trọng đã được giải quyết
+- ✅ Báo cáo test đã được tạo
 
-## 8. Defect Management
+## 8. Quản lý Lỗi
 
-### 8.1 Defect Severity Levels
-- **Critical**: System crash, data loss, security breach
-- **High**: Major feature not working
-- **Medium**: Feature works with issues
-- **Low**: Cosmetic issues, minor bugs
+### 8.1 Mức độ Nghiêm trọng của Lỗi
+- **Critical**: Crash hệ thống, mất dữ liệu, vi phạm bảo mật
+- **High**: Tính năng chính không hoạt động
+- **Medium**: Tính năng hoạt động có vấn đề
+- **Low**: Vấn đề giao diện, lỗi nhỏ
 
-### 8.2 Expected Test Failures
-Some tests are designed to fail as they test constraint violations:
-- Tests with field length > max (expected: Exception)
-- Tests with NULL on NOT NULL fields (expected: Exception)
-- Tests with duplicate unique keys (expected: EntityExistsException)
+### 8.2 Các Test Failures Dự kiến
+Một số tests được thiết kế để fail khi kiểm thử vi phạm ràng buộc:
+- Tests với độ dài trường > max (dự kiến: Exception)
+- Tests với NULL trên trường NOT NULL (dự kiến: Exception)
+- Tests với khóa unique trùng lặp (dự kiến: EntityExistsException)
 
-These are **expected failures** that validate system constraints.
+Đây là **failures dự kiến** để xác thực các ràng buộc hệ thống.
 
-## 9. Risk Management
+## 9. Quản lý Rủi ro
 
-### 9.1 Testing Risks
+### 9.1 Rủi ro Kiểm thử
 
-| Risk | Impact | Probability | Mitigation |
+| Rủi ro | Tác động | Xác suất | Giảm thiểu |
 |------|--------|-------------|------------|
-| Database not available | High | Low | Auto-setup in CI/CD |
-| UI element changes | Medium | Medium | Flexible element locators |
-| Browser compatibility | Medium | Low | Use standard ChromeDriver |
-| Test data conflicts | Low | Medium | Independent test data |
-| CI/CD timeout | Medium | Low | Optimize test execution |
+| Database không khả dụng | Cao | Thấp | Tự động setup trong CI/CD |
+| Thay đổi phần tử UI | Trung bình | Trung bình | Element locators linh hoạt |
+| Tương thích trình duyệt | Trung bình | Thấp | Sử dụng ChromeDriver chuẩn |
+| Xung đột dữ liệu test | Thấp | Trung bình | Dữ liệu test độc lập |
+| CI/CD timeout | Trung bình | Thấp | Tối ưu hóa thực thi test |
 
-## 10. Test Schedule
+## 10. Lịch trình Kiểm thử
 
-### 10.1 Test Phases
-1. **Unit Testing**: Ongoing during development
-2. **Integration Testing**: After DAO implementation
-3. **UI Testing**: After frontend implementation
-4. **Regression Testing**: Before each release
-5. **CI/CD Testing**: On every pull request
+### 10.1 Các giai đoạn Kiểm thử
+1. **Unit Testing**: Liên tục trong quá trình phát triển
+2. **Integration Testing**: Sau khi triển khai DAO
+3. **UI Testing**: Sau khi triển khai frontend
+4. **Regression Testing**: Trước mỗi lần phát hành
+5. **CI/CD Testing**: Trên mỗi pull request
 
-## 11. Responsibilities
+## 11. Trách nhiệm
 
-### 11.1 Test Team Roles
-- **Test Lead**: Overall test strategy and coordination
-- **Backend Tester**: DAO tests development and execution
-- **Frontend Tester**: UI tests development and execution
-- **DevOps**: CI/CD pipeline setup and maintenance
+### 11.1 Vai trò Nhóm Kiểm thử
+- **Test Lead**: Chiến lược và điều phối kiểm thử tổng thể
+- **Backend Tester**: Phát triển và thực thi DAO tests
+- **Frontend Tester**: Phát triển và thực thi UI tests
+- **DevOps**: Thiết lập và bảo trì CI/CD pipeline
 
-## 12. Tools and Technologies
+## 12. Công cụ và Công nghệ
 
 ### 12.1 Testing Frameworks
-- **TestNG 7.8.0**: Test execution framework
-- **Selenium 4.36.0**: Web UI automation
-- **JUnit 5.10.2**: Alternative testing framework
-- **Maven Surefire 3.2.5**: Test runner plugin
+- **TestNG 7.8.0**: Framework thực thi test
+- **Selenium 4.36.0**: Tự động hóa Web UI
+- **JUnit 5.10.2**: Framework kiểm thử thay thế
+- **Maven Surefire 3.2.5**: Plugin chạy test
 
-### 12.2 Development Tools
-- **Maven**: Build automation
-- **Git**: Version control
+### 12.2 Công cụ Phát triển
+- **Maven**: Tự động hóa build
+- **Git**: Kiểm soát phiên bản
 - **GitHub Actions**: CI/CD
 - **IntelliJ IDEA / Eclipse**: IDE
 
-## 13. Conclusion
+## 13. Kết luận
 
-This comprehensive test plan ensures thorough testing coverage of the PolySys system. With 173 total test cases covering backend and frontend functionality, the system is well-tested for reliability, security, and usability.
+Kế hoạch kiểm thử toàn diện này đảm bảo độ phủ kiểm thử kỹ lưỡng cho hệ thống PolySys. Với tổng cộng 173 test cases bao phủ chức năng backend và frontend, hệ thống được kiểm thử tốt về độ tin cậy, bảo mật và khả năng sử dụng.
 
-### 13.1 Test Coverage Summary
-- ✅ **Backend**: 133 tests covering all DAO operations
-- ✅ **Frontend**: 40 tests covering user workflows
-- ✅ **Techniques**: Black-box, boundary, equivalence, decision table
-- ✅ **Automation**: TestNG + Selenium + CI/CD
-- ✅ **Documentation**: Comprehensive test case documentation
+### 13.1 Tóm tắt Độ phủ Kiểm thử
+- ✅ **Backend**: 133 tests bao phủ tất cả các thao tác DAO
+- ✅ **Frontend**: 40 tests bao phủ quy trình người dùng
+- ✅ **Kỹ thuật**: Hộp đen, giá trị biên, tương đương, bảng quyết định
+- ✅ **Tự động hóa**: TestNG + Selenium + CI/CD
+- ✅ **Tài liệu**: Tài liệu test case toàn diện
 
 ---
 
-**Document Version**: 1.0
-**Last Updated**: 2025-10-20
-**Status**: Active
+**Phiên bản Tài liệu**: 1.0
+**Cập nhật lần cuối**: 2025-10-20
+**Trạng thái**: Đang hoạt động

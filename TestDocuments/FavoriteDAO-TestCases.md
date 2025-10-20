@@ -1,11 +1,11 @@
-# FavoriteDAO Test Cases Documentation
+# FavoriteDAO Test Cases - Tài liệu
 
-## Overview
-This document contains comprehensive test cases for the FavoriteDAO class, which manages user favorite videos in the PolySys system.
+## Tổng quan
+Tài liệu này chứa các test cases toàn diện cho class FavoriteDAO, quản lý các video yêu thích của người dùng trong hệ thống PolySys.
 
-## Test Coverage
-- **Total Test Cases**: 20
-- **Coverage Areas**: Create, Read, Delete operations, edge cases, and business logic
+## Độ phủ Test
+- **Tổng số Test Cases**: 20
+- **Các lĩnh vực được bao phủ**: Các thao tác Create, Read, Delete, trường hợp biên và logic nghiệp vụ
 
 ## Test Cases
 
