@@ -105,6 +105,18 @@ Kiểm thử giao diện quản lý video của admin:
 
 # Chỉ chạy VideoDAO tests
 ./run-tests.sh video
+
+# Chỉ chạy FavoriteDAO tests
+./run-tests.sh favorite
+
+# Chỉ chạy ShareDAO tests
+./run-tests.sh share
+
+# Chỉ chạy Login UI tests
+./run-tests.sh login
+
+# Chỉ chạy Video Browsing UI tests
+./run-tests.sh browse
 ```
 
 ### Phương pháp 2: Chạy thủ công với Maven
@@ -119,6 +131,10 @@ mvn test
 # 3. Chạy một test class cụ thể
 mvn test -Dtest=UserDAOTest
 mvn test -Dtest=VideoDAOTest
+mvn test -Dtest=FavoriteDAOTest
+mvn test -Dtest=ShareDAOTest
+mvn test -Dtest=LoginUITest
+mvn test -Dtest=VideoBrowsingUITest
 mvn test -Dtest=VideoManagementUITest
 
 # 4. Chạy một test method cụ thể
